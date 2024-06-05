@@ -1,4 +1,4 @@
-import { Friend } from "../types/Friend";
+import { Friend } from "../types/types";
 
 export const FriendCard = ({ friend }: { friend: Friend }) => {
   //0-4 rating

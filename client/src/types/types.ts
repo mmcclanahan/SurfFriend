@@ -6,3 +6,8 @@ export interface Friend {
   rating?: number;
   sessionTime?: string;
 }
+export interface StatusForm {
+  status: string;
+  location?: string;
+  rating?: string;
+}

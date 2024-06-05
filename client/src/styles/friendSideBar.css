@@ -1,23 +1,18 @@
 .friendSideBar {
   position: fixed;
   left: -150px; /* Hide off-screen initially */
-  top: 0;
-  height: 100%;
+  top: 10rem;
+  height: 80%;
   width: 250px;
   background-color: gray;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   overflow-x: hidden;
   transition: left 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .friendSideBar:hover {
   left: 0;
-}
-
-.friendSideBar h1 {
-  text-align: center;
-  padding: 16px 0;
 }
 
 .friendSideBar-content {
@@ -27,6 +22,7 @@
 
 .friendSideBar:hover .friendSideBar-content {
   display: block; /* Show content on hover */
+  text-align: center;
 }
 
 .friendSideBar ul {

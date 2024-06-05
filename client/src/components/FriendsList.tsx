@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FriendCard } from "./FriendCard";
-import { Friend } from "../types/Friend";
-import "../friendSideBar.css";
+import { Friend } from "../types/types";
+import "../styles/friendSideBar.css";
+
 export const FriendsList = () => {
   const friends: Friend[] = [
     {
@@ -30,8 +31,8 @@ export const FriendsList = () => {
 
   return (
     <div className="friendSideBar">
-      <h1>Friends List</h1>
       <div className="friendSideBar-content">
+        <h3>Friends</h3>
         <ul>
           {list.map((friend: Friend) => (
             <FriendCard key={friend.id} friend={friend} />

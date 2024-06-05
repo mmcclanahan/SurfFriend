@@ -1,11 +1,15 @@
+import { useNavigate } from "react-router-dom";
+
 export const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="homePage">
       <h1>Welcome User!</h1>
       <div className="buttonList">
-        <button>Update Status</button>
-        <button>Rate Session</button>
-        <button>Calender</button>
+        <button onClick={() => navigate("/status")}>Update Status</button>
+        <button onClick={() => navigate("/status")}>Rate Session</button>
+        <button onClick={() => navigate("/calender")}>Calender</button>
       </div>
     </div>
   );
