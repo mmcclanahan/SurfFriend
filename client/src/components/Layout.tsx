@@ -8,9 +8,7 @@ export const Layout = () => {
     <div>
       <Header />
       <FriendsList />
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 };

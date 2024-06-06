@@ -9,6 +9,7 @@
   overflow-x: hidden;
   transition: left 0.3s ease-in-out;
   z-index: 1;
+  border-top-right-radius: 10px;
 }
 
 .friendSideBar:hover {
@@ -37,32 +38,16 @@
   border-bottom: 1px solid #ddd;
 }
 
-.friendSideBar li:hover {
-  background-color: gray;
-}
-
 .friendCard {
   display: flex;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
-
-.homePage {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.friendName {
+  background-color: rgb(100, 98, 98);
+  border-radius: 5px;
+  border-bottom: 1px solid black;
 }
-
-.buttonList {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  min-width: 50%;
-  gap: 10px;
-}
-.buttonList button {
-  height: 10vh;
+.friendStatus {
 }

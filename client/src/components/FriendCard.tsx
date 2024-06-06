@@ -23,8 +23,8 @@ export const FriendCard = ({ friend }: { friend: Friend }) => {
         backgroundColor: colors[friend.status],
       }}
     >
-      <h5>{friend.displayName}</h5>
-      <p>
+      <h5 className="friendName">{friend.displayName}</h5>
+      <p className="friendStatus">
         {statusText[friend.status]}
         {friend.location && ` @ ${friend.location}`}
         {friend.rating && ` ${friend.rating}`}
