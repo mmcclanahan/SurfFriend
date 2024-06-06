@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import router from "./router";
+import sequelize from "./database/db";
 
 const app = express();
 
@@ -16,3 +17,16 @@ app.use(router);
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Database connected");
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on http://localhost:${process.env.PORT}`);
+    });
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+};
+
+startServer();
