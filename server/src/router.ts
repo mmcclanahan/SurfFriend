@@ -1,10 +1,11 @@
 import express from "express";
 const router = express.Router();
-import { setStatus, getStatus } from "./controllers/setStatus";
+import { createUser, getUser } from "./controllers/userController";
 import { getForecast } from "./controllers/forecastController";
 
 router.get("/forecast", getForecast);
-router.post("/set", setStatus);
-router.get("/set", getStatus);
+//user routes
+router.post("/user", createUser);
+router.get("/user", getUser);
 
 export default router;

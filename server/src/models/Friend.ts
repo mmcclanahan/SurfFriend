@@ -1,61 +1,23 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../database/db";
-import User from "./User";
 
-interface FriendAttributes {
-  id: number;
-  userId: number;
-  friendId: number;
-  accepted: boolean;
-}
-
-interface FriendCreationAttributes extends Optional<FriendAttributes, "id"> {}
-
-class Friend
-  extends Model<FriendAttributes, FriendCreationAttributes>
-  implements FriendAttributes
-{
-  public id!: number;
-  public userId!: number;
-  public friendId!: number;
-  public accepted!: boolean;
-}
-
-Friend.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "id",
-      },
-      onDelete: "CASCADE",
-    },
-    friendId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "id",
-      },
-      onDelete: "CASCADE",
-    },
-    accepted: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+const UserStatus = sequelize.define("Friend", {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "User",
+      key: "id",
     },
   },
-  {
-    tableName: "friends",
-    sequelize,
-  }
-);
+  friendId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "User",
+      key: "id",
+    },
+  },
+});
 
-Friend.belongsTo(User, { as: "User", foreignKey: "userId" });
-Friend.belongsTo(User, { as: "Friend", foreignKey: "friendId" });
-
-export default Friend;
+export default UserStatus;
