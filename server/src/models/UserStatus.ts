@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../database/db";
+import User from "./User";
 
 const UserStatus = sequelize.define("UserStatus", {
   status: {
@@ -14,6 +15,17 @@ const UserStatus = sequelize.define("UserStatus", {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "Users",
+      key: "id",
+    },
+  },
 });
+
+UserStatus.belongsTo(User, { foreignKey: "userId" });
+User.hasOne(UserStatus, { foreignKey: "userId", as: "Status" });
 
 export default UserStatus;
