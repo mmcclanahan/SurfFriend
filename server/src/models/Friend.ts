@@ -6,18 +6,16 @@ const Friend = sequelize.define("Friend", {
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    onDelete: "CASCADE",
     references: {
-      model: "Users",
+      model: User,
       key: "id",
     },
   },
   friendId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    onDelete: "CASCADE",
     references: {
-      model: "Users",
+      model: User,
       key: "id",
     },
   },
@@ -27,9 +25,12 @@ const Friend = sequelize.define("Friend", {
     defaultValue: false,
   },
 });
-User.hasMany(Friend, { foreignKey: "userId", as: "Friends" });
-User.hasMany(Friend, { foreignKey: "friendId", as: "FriendOf" });
-Friend.belongsTo(User, { foreignKey: "userId" });
-Friend.belongsTo(User, { foreignKey: "friendId" });
 
+User.belongsToMany(User, {
+  as: "FriendOf",
+  through: Friend,
+  foreignKey: "friendId",
+  otherKey: "userId",
+});
+Friend.belongsTo(User, { foreignKey: "friendId", as: "friends" });
 export default Friend;

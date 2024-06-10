@@ -19,13 +19,13 @@ const UserStatus = sequelize.define("UserStatus", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Users",
+      model: User,
       key: "id",
     },
   },
 });
 
 UserStatus.belongsTo(User, { foreignKey: "userId" });
-User.hasOne(UserStatus, { foreignKey: "userId", as: "Status" });
+User.hasOne(UserStatus, { foreignKey: "userId", as: "status" });
 
 export default UserStatus;
