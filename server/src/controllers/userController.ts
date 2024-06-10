@@ -3,19 +3,31 @@ import User from "../models/User";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const here = await User.create({ name: "test" });
-    res.send(here);
+    const { username, email, password } = req.body;
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+    });
+    res.status(200).send(newUser);
   } catch (error) {
     console.log(error);
     res.send(error);
   }
 };
 export const getUser = async (req: Request, res: Response) => {
-  const here = await User.findAll();
-  if (here) {
-    res.send(here);
-  } else {
-    res.send("nope");
+  try {
+    const { userId } = req.params;
+    const user = await User.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 /*

@@ -16,7 +16,7 @@ app.use(router);
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true });
+    //await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
     await sequelize.authenticate();
     console.log("Database connected");
