@@ -18,15 +18,17 @@ export const setStatus = async (req: Request, res: Response) => {
 };
 
 export const getStatus = async (req: Request, res: Response) => {
-  const id = req.params.userId;
-  console.log(typeof id);
   try {
+    const { userId } = req.params;
     const status = await UserStatus.findOne({
-      where: { id },
+      where: { userId: userId },
     });
+    if (!status) {
+      res.status(404).send("Status not found");
+      return;
+    }
     res.status(200).send(status);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving user's status");
+    res.status(500).send(error);
   }
 };

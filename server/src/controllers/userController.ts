@@ -1,17 +1,33 @@
 import { Request, Response } from "express";
+import sequelize from "../database/db";
 import User from "../models/User";
+import UserStatus from "../models/UserStatus";
 
 export const createUser = async (req: Request, res: Response) => {
+  const t = await sequelize.transaction();
   try {
     const { username, email, password } = req.body;
-    const newUser = await User.create({
-      username,
-      email,
-      password,
-    });
+    const newUser = await User.create(
+      {
+        username,
+        email,
+        password,
+      },
+      { transaction: t }
+    );
+    const newStatus = await UserStatus.create(
+      {
+        userId: newUser.id,
+        status: 1,
+        location: null,
+        rating: null,
+      },
+      { transaction: t }
+    );
+    await t.commit();
     res.status(200).send(newUser);
   } catch (error) {
-    console.log(error);
+    await t.rollback();
     res.send(error);
   }
 };
