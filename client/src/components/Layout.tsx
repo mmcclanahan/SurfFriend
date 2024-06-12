@@ -7,7 +7,7 @@ export const Layout = () => {
   return (
     <div>
       <Header />
-      <FriendsList />
+      <FriendsList userId={1} />
       <Outlet />
     </div>
   );

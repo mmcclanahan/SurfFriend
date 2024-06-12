@@ -8,6 +8,8 @@ import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import { Layout } from "./components/Layout.tsx";
 
+import { Query, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,11 +22,13 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-//header and footer components
-//header home button / profile button / shows all navigation
-//footer can be an about us / contact us / privacy policy / terms of service
+
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}></RouterProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
