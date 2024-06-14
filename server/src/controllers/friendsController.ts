@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, request } from "express";
 import User from "../models/User";
 import UserStatus from "../models/UserStatus";
 import Friend from "../models/Friend";
@@ -12,7 +12,7 @@ export const getFriends = async (req: Request, res: Response) => {
       include: [
         {
           model: User,
-          as: "friends",
+          as: "info",
           attributes: ["username"],
           include: [
             {
@@ -24,10 +24,37 @@ export const getFriends = async (req: Request, res: Response) => {
         },
       ],
     });
-    res.status(200).send(friends);
+    const flattenedFriends = friends.map((friend) => ({
+      userId: friend.userId,
+      friendId: friend.friendId,
+      request: friend.request,
+      createdAt: friend.createdAt,
+      updatedAt: friend.updatedAt,
+      username: friend.info?.username,
+      status: friend.info?.status?.status,
+      location: friend.info?.status?.location,
+      rating: friend.info?.status?.rating,
+    }));
+    res.status(200).send(flattenedFriends);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error retrieving user's friends");
+    res.status(500).send(error);
+  }
+};
+
+export const deleteFriend = async (req: Request, res: Response) => {
+  const { userId, friendId } = req.body;
+  try {
+    await Friend.destroy({
+      where: { userId, friendId },
+    });
+    await Friend.destroy({
+      where: { userId: friendId, friendId: userId },
+    });
+    res.status(200).send("Friend deleted");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting friend");
   }
 };
 
@@ -44,16 +71,36 @@ export const createFriendRequest = async (req: Request, res: Response) => {
     await Friend.create({
       userId,
       friendId: friendObj.id,
+      request: "sent",
     });
 
     await Friend.create({
       userId: friendObj.id,
       friendId: userId,
+      request: "received",
     });
 
     res.status(200).send("friend request sent");
   } catch (error) {
     console.log(error);
     res.send(error);
+  }
+};
+
+export const comfirmFriendRequest = async (req: Request, res: Response) => {
+  const { userId, friendId } = req.body;
+  try {
+    await Friend.update(
+      { request: "accepted" },
+      { where: { userId, friendId } }
+    );
+    await Friend.update(
+      { request: "accepted" },
+      { where: { userId: friendId, friendId: userId } }
+    );
+    res.status(200).send("Friend request accepted");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error accepting friend request");
   }
 };

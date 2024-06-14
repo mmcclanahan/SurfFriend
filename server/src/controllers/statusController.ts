@@ -1,19 +1,21 @@
 import { Request, Response } from "express";
 import UserStatus from "../models/UserStatus";
 
-export const setStatus = async (req: Request, res: Response) => {
-  const { status, location, rating, userId } = req.body;
+export const updateStatus = async (req: Request, res: Response) => {
+  const { userId, status, location, rating } = req.body;
   try {
-    const newStatus = await UserStatus.create({
-      status,
-      location,
-      rating,
-      userId,
-    });
+    const newStatus = await UserStatus.update(
+      {
+        userId,
+        status,
+        location,
+        rating,
+      },
+      { where: { userId } }
+    );
     res.status(200).send(newStatus);
   } catch (error) {
-    console.log(error);
-    res.send(error);
+    res.status(500).send(error);
   }
 };
 

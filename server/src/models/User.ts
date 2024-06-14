@@ -1,6 +1,6 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../database/db";
-import Friend from "./Friend";
+import { UserAttributes } from "../types/userTypes";
 
 class User extends Model {
   declare id: number;

@@ -1,34 +1,80 @@
+import { request } from "express";
 import sequelize from "../database/db";
 import Friend from "../models/Friend";
 import User from "../models/User";
 import UserStatus from "../models/UserStatus";
 
 const userObj = {
-  username: "b",
-  email: "b@gmail.com",
+  username: "user1",
+  email: "user1@gmail.com",
   password: "password",
 };
 
 const userObj2 = {
-  username: "c",
-  email: "c@gmail.com",
+  username: "user2",
+  email: "user2@gmail.com",
   password: "password",
 };
 
 const userObj3 = {
-  username: "d",
-  email: "d@gmail.com",
+  username: "user3",
+  email: "user3@gmail.com",
   password: "password",
 };
-const users = [userObj, userObj2, userObj3];
-
-const friendObj = {
-  userId: 1,
-  friendId: 2,
+const userObj4 = {
+  username: "user4",
+  email: "user4@gmail.com",
+  password: "password",
 };
+const users = [userObj, userObj2, userObj3, userObj4];
+
+const friendObjs = [
+  {
+    userId: 1,
+    friendId: 2,
+    request: "accepted",
+  },
+  {
+    userId: 1,
+    friendId: 3,
+    request: "sent",
+  },
+  {
+    userId: 1,
+    friendId: 4,
+    request: "received",
+  },
+];
+
+const statusObjs = [
+  {
+    userId: 2,
+    status: 2,
+    location: "12th St",
+    rating: null,
+  },
+  {
+    userId: 3,
+    status: 3,
+    location: "33rd St",
+    rating: null,
+  },
+  {
+    userId: 4,
+    status: 4,
+    location: "34th St",
+    rating: 3,
+  },
+];
 const fill = async (
   users: { username: string; email: string; password: string }[],
-  friendObj: { userId: number; friendId: number }
+  friendObjs: { userId: number; friendId: number }[],
+  statusObjs: {
+    userId: number;
+    status: number;
+    location?: string;
+    rating?: number | null;
+  }[]
 ) => {
   try {
     await sequelize.authenticate();
@@ -36,11 +82,14 @@ const fill = async (
     await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
     await User.bulkCreate(users);
-    await Friend.create(friendObj);
-    console.log("filled");
+    console.log("users filled");
+    await Friend.bulkCreate(friendObjs);
+    console.log("friends filled");
+    await UserStatus.bulkCreate(statusObjs);
+    console.log("status filled");
   } catch (error) {
     console.log(error);
   }
 };
 
-fill(users, friendObj);
+fill(users, friendObjs, statusObjs);
