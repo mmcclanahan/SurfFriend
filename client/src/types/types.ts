@@ -1,10 +1,13 @@
 export interface Friend {
-  id: number;
-  displayName: string;
+  userId: number;
+  friendId: number;
+  request: string;
+  createdAt: string;
+  updatedAt: string;
+  username: string;
   status: number;
-  location?: string;
-  rating?: number;
-  sessionTime?: string;
+  location: string | null;
+  rating: number | null;
 }
 export interface StatusForm {
   status: string;
