@@ -1,7 +1,8 @@
 import axios from "axios";
+import { URL } from "../config";
 
 export const getFriends = async (userId: number) => {
-  const { data } = await axios.get(`http://localhost:8080/friends/${userId}`);
+  const { data } = await axios.get(`${URL}/friends/${userId}`);
   return data;
 };
 
@@ -9,7 +10,7 @@ export const createFriendRequest = async (
   userId: number,
   friendUserName: string
 ) => {
-  const { data } = await axios.post("http://localhost:8080/friends", {
+  const { data } = await axios.post(`${URL}/friends`, {
     userId,
     friendUserName,
   });
@@ -20,7 +21,7 @@ export const confirmFriendRequest = async (
   userId: number,
   friendId: number
 ) => {
-  const { data } = await axios.put("http://localhost:8080/friends", {
+  const { data } = await axios.put(`${URL}/friends`, {
     userId,
     friendId,
   });
@@ -28,7 +29,7 @@ export const confirmFriendRequest = async (
 };
 
 export const deleteFriend = async (userId: number, friendId: number) => {
-  const { data } = await axios.delete("http://localhost:8080/friends", {
+  const { data } = await axios.delete(`${URL}/friends`, {
     data: { userId, friendId },
   });
   return data;

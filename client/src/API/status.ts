@@ -1,21 +1,18 @@
 import axios from "axios";
+import { URL } from "../config";
+import { StatusForm } from "../types/types";
 
 export const getStatus = async (userId: number) => {
-  const { data } = await axios.get(`/status/${userId}`);
+  const { data } = await axios.get(`${URL}/status/${userId}`);
   return data;
 };
 
-export const updateStatus = async (
-  userId: number,
-  status: number,
-  location?: string,
-  rating?: number
-) => {
-  const { data } = await axios.put("/status", {
+export const updateStatus = async (userId: number, StatusForm: StatusForm) => {
+  const { data } = await axios.put(`${URL}/status`, {
     userId,
-    status,
-    location,
-    rating,
+    status: StatusForm.status,
+    location: StatusForm.location,
+    rating: StatusForm.rating,
   });
   return data;
 };

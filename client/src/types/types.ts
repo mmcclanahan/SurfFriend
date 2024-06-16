@@ -10,7 +10,7 @@ export interface Friend {
   rating: number | null;
 }
 export interface StatusForm {
-  status: string;
+  status: number;
   location?: string;
-  rating?: string;
+  rating: number;
 }

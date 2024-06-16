@@ -44,6 +44,11 @@
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
+.friendCardHeader {
+  display: grid;
+  grid-template-areas: "name name name btn";
+  grid-template-columns: 4fr 1fr;
+}
 .friendName {
   background-color: rgb(100, 98, 98);
   border-radius: 5px;

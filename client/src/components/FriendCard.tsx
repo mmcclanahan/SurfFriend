@@ -11,9 +11,9 @@ export const FriendCard = ({ friend }: { friend: Friend }) => {
   };
   const statusText: { [key: number]: string } = {
     1: "Not surfing",
-    2: "Checking the waves at",
-    3: "In the water at ",
-    4: "Done surfing, Rating: ",
+    2: `Checking the waves at ${friend.location}`,
+    3: `In the water at ${friend.location}`,
+    4: `Done surfing at ${friend.location} Rating: ${friend.rating}`,
   };
   const queryClient = useQueryClient();
 
@@ -41,12 +41,12 @@ export const FriendCard = ({ friend }: { friend: Friend }) => {
   };
   //sent, received, accepted, rejected
   return (
-    <li>
-      <div className="friend-card">
-        <div className="friendCardHeader">
-          <h5 className="friendName">{friend.username}</h5>
-          <button onClick={handleDeleteFriend}>x</button>
-        </div>
+    <li className="friend-card">
+      <div className="friendCardHeader">
+        <h5 className="friendName">{friend.username}</h5>
+        <button onClick={handleDeleteFriend}>x</button>
+      </div>
+      <div className="friendStatus">
         {friend.request === "sent" && (
           <p className="friendStatus">Pending Friend Request</p>
         )}
@@ -54,30 +54,9 @@ export const FriendCard = ({ friend }: { friend: Friend }) => {
           <button onClick={handleConfirmFriend}>Accept Friend Request</button>
         )}
         {friend.request === "accepted" && (
-          <p className="friendStatus">
-            {statusText[friend.status]}
-            {(friend.status === 2 || friend.status === 3) &&
-              friend.location &&
-              `${friend.location}`}
-            {friend.status === 4 && friend.rating && `${friend.rating}`}
-          </p>
+          <p className="friendStatus">{statusText[friend.status]}</p>
         )}
       </div>
     </li>
   );
 };
-
-/**<li
-      className="friend-card"
-      style={{
-        backgroundColor: colors[friend.status],
-      }}
-    >
-      <h5 className="friendName">{friend.displayName}</h5>
-      <p className="friendStatus">
-        {statusText[friend.status]}
-        {friend.location && ` @ ${friend.location}`}
-        {friend.rating && ` ${friend.rating}`}
-        {` ${friend.sessionTime}`}
-      </p>
-    </li> */

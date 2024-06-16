@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { Loading } from "./Loading";
 import { FriendCard } from "./FriendCard";
 import { Friend } from "../types/types";
 import { getFriends, createFriendRequest } from "../API/friends";
@@ -23,7 +23,7 @@ export const FriendsList = ({ userId }: { userId: number }) => {
     },
   });
 
-  if (friendsQuery.isLoading) return <div>Loading...</div>;
+  if (friendsQuery.isLoading) return <Loading />;
   if (friendsQuery.isError) return <div>Error</div>;
   if (!friendsQuery.data) return <div>No friends</div>;
 

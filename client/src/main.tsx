@@ -8,7 +8,7 @@ import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import { Layout } from "./components/Layout.tsx";
 
-import { Query, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <HomePage /> },
-      { path: "/status", element: <StatusPage /> },
+      { path: "/status", element: <StatusPage userId={1} /> },
       { path: "/rate", element: <RatePage /> },
     ],
   },
