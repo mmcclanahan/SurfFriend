@@ -8,6 +8,11 @@ import {
   comfirmFriendRequest,
 } from "./controllers/friendsController";
 import { getStatus, updateStatus } from "./controllers/statusController";
+import {
+  getSessionsForMonth,
+  createSession,
+  getAllSessions,
+} from "./controllers/sessionsController";
 import { getForecast } from "./controllers/forecastController";
 
 router.get("/forecast", getForecast);
@@ -22,4 +27,8 @@ router.delete("/friends", deleteFriend);
 //status routes
 router.get("/status/:userId", getStatus);
 router.put("/status", updateStatus);
+//session routes
+router.get("/sessions/:userId", getAllSessions);
+router.get("/sessions/:userId/:monthNumber", getSessionsForMonth);
+router.post("/sessions", createSession);
 export default router;

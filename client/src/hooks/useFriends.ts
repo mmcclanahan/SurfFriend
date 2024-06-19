@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getFriends,
   createFriendRequest,
@@ -7,28 +7,53 @@ import {
 } from "../API/friends";
 
 export const useFriends = (userId: number) => {
+  const queryClient = useQueryClient();
+
   const friendsQuery = useQuery({
     queryKey: ["friends"],
     queryFn: () => getFriends(userId),
   });
 
-  const createFriendMutation = useMutation({
+  const createFriendRequestMutation = useMutation({
     mutationFn: (friendUserName: string) =>
       createFriendRequest(userId, friendUserName),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
+    },
   });
-  const confirmFriendMutation = useMutation({
-    mutationFn: ({ userId, friendId }: { userId: number; friendId: number }) =>
-      confirmFriendRequest(userId, friendId),
+
+  const confirmFriendRequestMutation = useMutation({
+    mutationFn: (friendId: number) => confirmFriendRequest(userId, friendId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
+    },
   });
   const deleteFriendMutation = useMutation({
-    mutationFn: ({ userId, friendId }: { userId: number; friendId: number }) =>
-      deleteFriend(userId, friendId),
+    mutationFn: (friendId: number) => deleteFriend(userId, friendId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
+    },
   });
+
+  const handleAddFriend = (friendUsername: string) => {
+    createFriendRequestMutation.mutate(friendUsername);
+  };
+
+  const handleConfirmFriend = (friendId: number) => {
+    confirmFriendRequestMutation.mutate(friendId);
+  };
+
+  const handleDeleteFriend = (friendId: number) => {
+    deleteFriendMutation.mutate(friendId);
+  };
 
   return {
     friendsQuery,
-    createFriendMutation,
-    confirmFriendMutation,
+    createFriendRequestMutation,
+    confirmFriendRequestMutation,
     deleteFriendMutation,
+    handleAddFriend,
+    handleConfirmFriend,
+    handleDeleteFriend,
   };
 };

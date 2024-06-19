@@ -3,6 +3,7 @@ import sequelize from "../database/db";
 import Friend from "../models/Friend";
 import User from "../models/User";
 import UserStatus from "../models/UserStatus";
+import Session from "../models/Session";
 
 const userObj = {
   username: "user1",
@@ -35,29 +36,50 @@ const friendObjs = [
     request: "accepted",
   },
   {
+    userId: 2,
+    friendId: 1,
+    request: "accepted",
+  },
+  {
     userId: 1,
     friendId: 3,
     request: "sent",
+  },
+  {
+    userId: 3,
+    friendId: 1,
+    request: "received",
   },
   {
     userId: 1,
     friendId: 4,
     request: "received",
   },
+  {
+    userId: 4,
+    friendId: 1,
+    request: "sent",
+  },
 ];
 
 const statusObjs = [
   {
+    userId: 1,
+    status: 1,
+    location: "",
+    rating: 0,
+  },
+  {
     userId: 2,
     status: 2,
     location: "12th St",
-    rating: null,
+    rating: 0,
   },
   {
     userId: 3,
     status: 3,
     location: "33rd St",
-    rating: null,
+    rating: 0,
   },
   {
     userId: 4,
@@ -72,8 +94,8 @@ const fill = async (
   statusObjs: {
     userId: number;
     status: number;
-    location?: string;
-    rating?: number | null;
+    location?: string | null;
+    rating?: number;
   }[]
 ) => {
   try {
@@ -87,6 +109,8 @@ const fill = async (
     console.log("friends filled");
     await UserStatus.bulkCreate(statusObjs);
     console.log("status filled");
+    await Session.create({ userId: 1, location: "12th St", rating: 3 });
+    console.log("session filled");
   } catch (error) {
     console.log(error);
   }

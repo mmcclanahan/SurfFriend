@@ -13,7 +13,7 @@ const UserStatus = sequelize.define("UserStatus", {
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
   userId: {
     type: DataTypes.INTEGER,
