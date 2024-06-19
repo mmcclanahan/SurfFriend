@@ -1,27 +1,24 @@
 import { useState, useEffect } from "react";
 import { Loading } from "../components/Loading";
-import { StatusForm } from "../types/types";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { getStatus, updateStatus } from "../API/status";
+import { StatusForm, Session } from "../types/types";
+import { useUserStatus } from "../hooks/useUserStatus";
+import { createSession } from "../API/sessions";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import "../styles/statusPage.css";
 
-export const StatusPage = ({ userId }: { userId: number }) => {
+export const StatusPage = ({ userId = 1 }: { userId: number }) => {
+  const navigate = useNavigate();
   const [status, setStatus] = useState(1);
   const [location, setLocation] = useState("");
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(3);
+  const { setNotification } = useOutletContext<{
+    setNotification: (notification: {
+      message: string;
+      positive: boolean;
+    }) => void;
+  }>();
 
-  const queryClient = useQueryClient();
-  const statusQuery = useQuery({
-    queryKey: ["status"],
-    queryFn: () => getStatus(userId),
-  });
-
-  const updateStatusMutation = useMutation({
-    mutationFn: (statusForm: StatusForm) => updateStatus(userId, statusForm),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["status"] });
-    },
-  });
+  const { statusQuery, updateStatusMutation } = useUserStatus(userId);
 
   useEffect(() => {
     if (statusQuery.data) {
@@ -31,7 +28,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
     }
   }, [statusQuery.data]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const statusForm: StatusForm = {
       status,
@@ -39,6 +36,28 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       rating,
     };
     updateStatusMutation.mutate(statusForm);
+    if (status === 4) {
+      const session: Session = {
+        location,
+        rating,
+      };
+      createSession(userId, session);
+    }
+    navigate("/");
+    setNotification({
+      message: "Status updated",
+      positive: true,
+    });
+  };
+
+  const handleStatusChange = (status: number) => {
+    setStatus(status);
+    if (status === 1) {
+      setLocation("");
+    }
+    if (status < 4 && rating !== 0) {
+      setRating(0);
+    }
   };
 
   if (statusQuery.isLoading) return <Loading />;
@@ -55,7 +74,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             id="status"
             value={status}
             onChange={(e) => {
-              setStatus(Number(e.target.value));
+              handleStatusChange(Number(e.target.value));
             }}
           >
             <option value={1}>Not Surfing</option>

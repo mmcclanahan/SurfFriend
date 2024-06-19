@@ -14,3 +14,11 @@ export interface StatusForm {
   location?: string;
   rating: number;
 }
+
+export interface Session {
+  userId?: number;
+  location: string;
+  rating: number;
+  conditions?: string;
+  createdAt?: string;
+}

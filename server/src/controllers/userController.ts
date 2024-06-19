@@ -19,8 +19,8 @@ export const createUser = async (req: Request, res: Response) => {
       {
         userId: newUser.id,
         status: 1,
-        location: null,
-        rating: null,
+        location: "",
+        rating: 0,
       },
       { transaction: t }
     );

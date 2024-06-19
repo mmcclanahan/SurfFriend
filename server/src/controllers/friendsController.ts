@@ -1,4 +1,4 @@
-import { Request, Response, request } from "express";
+import { Request, Response } from "express";
 import User from "../models/User";
 import UserStatus from "../models/UserStatus";
 import Friend from "../models/Friend";
@@ -24,17 +24,30 @@ export const getFriends = async (req: Request, res: Response) => {
         },
       ],
     });
-    const flattenedFriends = friends.map((friend) => ({
-      userId: friend.userId,
-      friendId: friend.friendId,
-      request: friend.request,
-      createdAt: friend.createdAt,
-      updatedAt: friend.updatedAt,
-      username: friend.info?.username,
-      status: friend.info?.status?.status,
-      location: friend.info?.status?.location,
-      rating: friend.info?.status?.rating,
-    }));
+    const flattenedFriends = friends.map((friend) => {
+      if (friend.request === "accepted") {
+        return {
+          userId: friend.userId,
+          friendId: friend.friendId,
+          request: friend.request,
+          createdAt: friend.createdAt,
+          updatedAt: friend.updatedAt,
+          username: friend.info?.username,
+          status: friend.info?.status?.status,
+          location: friend.info?.status?.location,
+          rating: friend.info?.status?.rating,
+        };
+      } else {
+        return {
+          userId: friend.userId,
+          friendId: friend.friendId,
+          request: friend.request,
+          createdAt: friend.createdAt,
+          updatedAt: friend.updatedAt,
+          username: friend.info?.username,
+        };
+      }
+    });
     res.status(200).send(flattenedFriends);
   } catch (error) {
     console.error(error);

@@ -1,8 +1,15 @@
 import { Friend } from "../types/types";
-import { deleteFriend, confirmFriendRequest } from "../API/friends";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFriends } from "../hooks/useFriends";
 
-export const FriendCard = ({ friend }: { friend: Friend }) => {
+export const FriendCard = ({
+  userId,
+  friend,
+}: {
+  userId: number;
+  friend: Friend;
+}) => {
+  const { handleDeleteFriend, handleConfirmFriend } = useFriends(userId);
+
   const colors: { [key: number]: string } = {
     1: "gray",
     2: "yellow",
@@ -15,43 +22,31 @@ export const FriendCard = ({ friend }: { friend: Friend }) => {
     3: `In the water at ${friend.location}`,
     4: `Done surfing at ${friend.location} Rating: ${friend.rating}`,
   };
-  const queryClient = useQueryClient();
 
-  const deleteFriendMutation = useMutation({
-    mutationFn: (friendId: number) => deleteFriend(friend.userId, friendId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friends"] });
-    },
-  });
-
-  const confirmFriendRequestMutation = useMutation({
-    mutationFn: (friendId: number) =>
-      confirmFriendRequest(friend.userId, friendId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friends"] });
-    },
-  });
-
-  const handleConfirmFriend = () => {
-    confirmFriendRequestMutation.mutate(friend.friendId);
-  };
-
-  const handleDeleteFriend = () => {
-    deleteFriendMutation.mutate(friend.friendId);
-  };
-  //sent, received, accepted, rejected
   return (
     <li className="friend-card">
       <div className="friendCardHeader">
         <h5 className="friendName">{friend.username}</h5>
-        <button onClick={handleDeleteFriend}>x</button>
+        <button
+          onClick={() => {
+            handleDeleteFriend(friend.friendId);
+          }}
+        >
+          x
+        </button>
       </div>
       <div className="friendStatus">
         {friend.request === "sent" && (
           <p className="friendStatus">Pending Friend Request</p>
         )}
         {friend.request === "received" && (
-          <button onClick={handleConfirmFriend}>Accept Friend Request</button>
+          <button
+            onClick={() => {
+              handleConfirmFriend(friend.friendId);
+            }}
+          >
+            Accept Friend Request
+          </button>
         )}
         {friend.request === "accepted" && (
           <p className="friendStatus">{statusText[friend.status]}</p>
