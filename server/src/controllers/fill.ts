@@ -1,9 +1,9 @@
-import { request } from "express";
 import sequelize from "../database/db";
 import Friend from "../models/Friend";
 import User from "../models/User";
 import UserStatus from "../models/UserStatus";
 import Session from "../models/Session";
+import SurfSpot from "../models/SurfSpot";
 
 const userObj = {
   username: "user1",
@@ -88,6 +88,44 @@ const statusObjs = [
     rating: 3,
   },
 ];
+const spots = [
+  {
+    userId: 1,
+    name: "North Side",
+    city: "Huntington Beach",
+    timesSurfed: 10,
+  },
+  {
+    userId: 1,
+    name: "South Side",
+    city: "Huntington Beach",
+    timesSurfed: 5,
+  },
+  {
+    userId: 1,
+    name: "Blackies",
+    city: "Newport Beach",
+    timesSurfed: 3,
+  },
+  {
+    userId: 2,
+    name: "The Wedge",
+    city: "Newport Beach",
+    timesSurfed: 10,
+  },
+  {
+    userId: 2,
+    name: "HB Pier",
+    city: "Huntington Beach",
+    timesSurfed: 5,
+  },
+  {
+    userId: 3,
+    name: "Goldenwest",
+    city: "Huntington Beach",
+    timesSurfed: 3,
+  },
+];
 const fill = async (
   users: { username: string; email: string; password: string }[],
   friendObjs: { userId: number; friendId: number }[],
@@ -96,6 +134,12 @@ const fill = async (
     status: number;
     location?: string | null;
     rating?: number;
+  }[],
+  spots: {
+    userId: number;
+    name: string;
+    city: string;
+    timesSurfed: number;
   }[]
 ) => {
   try {
@@ -111,9 +155,11 @@ const fill = async (
     console.log("status filled");
     await Session.create({ userId: 1, location: "12th St", rating: 3 });
     console.log("session filled");
+    await SurfSpot.bulkCreate(spots);
+    console.log("spots filled");
   } catch (error) {
     console.log(error);
   }
 };
 
-fill(users, friendObjs, statusObjs);
+fill(users, friendObjs, statusObjs, spots);

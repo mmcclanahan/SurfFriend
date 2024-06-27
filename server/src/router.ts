@@ -13,6 +13,11 @@ import {
   createSession,
   getAllSessions,
 } from "./controllers/sessionsController";
+import {
+  getAllUserSurfSpots,
+  createSurfSpot,
+  incrementSurfSpot,
+} from "./controllers/surfSpotsController";
 import { getForecast } from "./controllers/forecastController";
 
 router.get("/forecast", getForecast);
@@ -31,4 +36,8 @@ router.put("/status", updateStatus);
 router.get("/sessions/:userId", getAllSessions);
 router.get("/sessions/:userId/:monthNumber", getSessionsForMonth);
 router.post("/sessions", createSession);
+//surf spot routes
+router.get("/spots/:userId", getAllUserSurfSpots);
+router.post("/spots", createSurfSpot);
+router.put("/spots/:id", incrementSurfSpot);
 export default router;

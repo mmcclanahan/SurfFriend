@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../database/db";
-import { UserAttributes } from "../types/userTypes";
 
 class User extends Model {
   declare id: number;
