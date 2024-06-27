@@ -8,7 +8,6 @@ import { CalendarPage } from "./pages/CalendarPage.tsx";
 import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import { Layout } from "./components/Layout.tsx";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([

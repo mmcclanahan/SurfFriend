@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "./Header";
-import { FriendsList } from "./FriendsList";
+import { FriendsList } from "./FriendsSideBar/FriendsList";
 import { NotificationHeader } from "./NotificationHeader";
 //import { Footer } from "./Footer";
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Loading } from "./Loading";
+import { Loading } from "../Loading";
 import { FriendCard } from "./FriendCard";
-import { Friend } from "../types/types";
-import { useFriends } from "../hooks/useFriends";
-import "../styles/friendSideBar.css";
+import { Friend } from "../../types/types";
+import { useFriends } from "../../hooks/useFriends";
+import "../../styles/friendSideBar.css";
 
 export const FriendsList = ({ userId }: { userId: number }) => {
   const { friendsQuery, handleAddFriend } = useFriends(userId);

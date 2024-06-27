@@ -1,5 +1,5 @@
-import { Friend } from "../types/types";
-import { useFriends } from "../hooks/useFriends";
+import { Friend } from "../../types/types";
+import { useFriends } from "../../hooks/useFriends";
 
 export const FriendCard = ({
   userId,

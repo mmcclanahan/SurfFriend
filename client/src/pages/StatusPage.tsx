@@ -6,7 +6,7 @@ import { createSession } from "../API/sessions";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import "../styles/statusPage.css";
 
-export const StatusPage = ({ userId = 1 }: { userId: number }) => {
+export const StatusPage = ({ userId }: { userId: number }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(1);
   const [location, setLocation] = useState("");

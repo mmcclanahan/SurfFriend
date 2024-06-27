@@ -22,3 +22,11 @@ export interface Session {
   conditions?: string;
   createdAt?: string;
 }
+
+export interface SurfSpot {
+  id?: number;
+  userId: number;
+  name: string;
+  city: string;
+  timesSurfed?: number;
+}
