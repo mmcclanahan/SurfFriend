@@ -30,3 +30,12 @@ export interface SurfSpot {
   city: string;
   timesSurfed?: number;
 }
+
+export interface AddSpotFormProps {
+  createSpot: (surfSpot: SurfSpot) => void;
+  userId: number;
+  city?: string;
+  cities: string[];
+  surfSpots: SurfSpot[];
+  setShowSpotForm: (bool: boolean) => void;
+}

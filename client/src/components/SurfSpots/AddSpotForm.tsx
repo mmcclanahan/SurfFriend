@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { SurfSpot } from "../../types/types";
+import { useNotification } from "../NotificationHeader";
+import { AddSpotFormProps } from "../../types/types";
+import { doesNameExist, checkMatchingText } from "../../utils/spotFormFns";
 
 export const AddSpotForm = ({
   createSpot,
@@ -7,55 +10,48 @@ export const AddSpotForm = ({
   city,
   cities,
   surfSpots,
-}: {
-  createSpot: (surfSpot: SurfSpot) => void;
-  userId: number;
-  city?: string;
-  cities: string[];
-  surfSpots: SurfSpot[];
-}) => {
-  const [selectedCity, setSelectedCity] = useState(city || "");
-  const [textCity, setTextCity] = useState("");
+  setShowSpotForm,
+}: AddSpotFormProps) => {
+  const { showNotification, Notification } = useNotification();
+  const [selectedCity, setSelectedCity] = useState(city || "Other");
+  const [newCity, setNewCity] = useState("");
   const [name, setName] = useState("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    //check if city exists already
     let city = selectedCity;
     if (city === "Other") {
-      city = checkMatchingText(textCity, cities);
+      city = checkMatchingText(newCity, cities);
     } else {
       city = selectedCity;
     }
-    const checkedName = checkMatchingText(
-      name,
-      surfSpots.map((spot: SurfSpot) => spot.name)
-    );
-    if (checkedName === name) {
-      console.log("Spot name already exists");
+    //check if name exists alredy exists
+    if (
+      doesNameExist(
+        name,
+        surfSpots.filter((spot) => spot.city === city).map((spot) => spot.name)
+      )
+    ) {
+      showNotification("Spot already exists", "red");
       return;
     }
+    const checkedName = checkMatchingText(
+      name,
+      surfSpots.filter((spot) => spot.city === city).map((spot) => spot.name)
+    );
     const surfSpot: SurfSpot = {
       userId,
       name: checkedName,
       city: city,
     };
     createSpot(surfSpot);
-  };
-
-  const checkMatchingText = (text: string, list: string[]) => {
-    const lowerCaseNoSpaceText = text.toLowerCase().replace(/\s+/g, "");
-    const matchingListString = list.find(
-      (cityOption: string) =>
-        cityOption.toLowerCase().replace(/\s+/g, "") === lowerCaseNoSpaceText
-    );
-    if (matchingListString) {
-      return matchingListString;
-    }
-    return text;
+    showNotification("Spot added successfully!", "green");
   };
 
   return (
-    <div className="add-spot-form">
+    <div className="addSpotForm">
+      <Notification />
       <h2>Add a Surf Spot</h2>
       <form onSubmit={handleSubmit}>
         <div className="formDivs">
@@ -77,9 +73,9 @@ export const AddSpotForm = ({
             <input
               required
               type="text"
-              value={textCity}
+              value={newCity}
               disabled={selectedCity !== "Other"}
-              onChange={(e) => setTextCity(e.target.value)}
+              onChange={(e) => setNewCity(e.target.value)}
             />
           }
         </div>
@@ -96,6 +92,14 @@ export const AddSpotForm = ({
           />
         </div>
         <button type="submit">Add Spot</button>
+        <button
+          type="button"
+          onClick={() => {
+            setShowSpotForm(false);
+          }}
+        >
+          back
+        </button>
       </form>
     </div>
   );

@@ -16,7 +16,7 @@ export const SurfSpots = ({ userId }: { userId: number }) => {
   //have a edit button that will allow the user to edit the spot
   const { surfSpotsQuery, handleCreateSurfSpot } = useSurfSpots(userId);
   const [selectedCity, setSelectedCity] = useState("");
-  const [addingSpot, setAddingSpot] = useState(false);
+  const [showSpotForm, setShowSpotForm] = useState(false);
 
   if (surfSpotsQuery.isLoading) return <Loading />;
   const surfSpots = surfSpotsQuery.data || [];
@@ -39,13 +39,14 @@ export const SurfSpots = ({ userId }: { userId: number }) => {
   return (
     <div>
       <h3>{selectedCity ? `${selectedCity}` : "Your Surf Spots"}</h3>
-      <button onClick={() => setAddingSpot(true)}>Add Spot</button>
-      {addingSpot && (
+      <button onClick={() => setShowSpotForm(true)}>Add Spot</button>
+      {showSpotForm && (
         <AddSpotForm
           createSpot={handleCreateSurfSpot}
           userId={userId}
           cities={Object.keys(cities)}
           surfSpots={surfSpots}
+          setShowSpotForm={setShowSpotForm}
         />
       )}
       {selectedCity && (
