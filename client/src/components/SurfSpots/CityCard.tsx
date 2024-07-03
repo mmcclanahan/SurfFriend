@@ -6,7 +6,10 @@ interface CityCardProps {
 
 export const CityCard = ({ city, spots, selectCity }: CityCardProps) => {
   return (
-    <div className="city-card" onClick={() => selectCity(city)}>
+    <div
+      className="border rounded shadow-md bg-myGray p-5"
+      onClick={() => selectCity(city)}
+    >
       <h4>{city}</h4>
       <p>Surf Spots: {spots}</p>
     </div>

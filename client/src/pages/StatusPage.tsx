@@ -3,20 +3,13 @@ import { Loading } from "../components/Loading";
 import { StatusForm, Session } from "../types/types";
 import { useUserStatus } from "../hooks/useUserStatus";
 import { createSession } from "../API/sessions";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import "../styles/statusPage.css";
+import { useNavigate } from "react-router-dom";
 
 export const StatusPage = ({ userId }: { userId: number }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(1);
   const [location, setLocation] = useState("");
   const [rating, setRating] = useState(3);
-  const { setNotification } = useOutletContext<{
-    setNotification: (notification: {
-      message: string;
-      positive: boolean;
-    }) => void;
-  }>();
 
   const { statusQuery, updateStatusMutation } = useUserStatus(userId);
 
@@ -44,10 +37,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       createSession(userId, session);
     }
     navigate("/");
-    setNotification({
-      message: "Status updated",
-      positive: true,
-    });
+    //notification here
   };
 
   const handleStatusChange = (status: number) => {

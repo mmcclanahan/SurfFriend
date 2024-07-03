@@ -7,13 +7,6 @@ import { Loading } from "../Loading";
 import { AddSpotForm } from "./AddSpotForm";
 
 export const SurfSpots = ({ userId }: { userId: number }) => {
-  //on render fetch all surfspots from  datatbase for user
-  //get all spots by city and render out card for the city name and amount of spots in it
-  //clicking on city name will render out all surfspots in that city and a button to add a new spot to that city
-
-  //have add spot button that will add a new spot to the list
-  //have a delete button that will delete the spot from the list
-  //have a edit button that will allow the user to edit the spot
   const { surfSpotsQuery, handleCreateSurfSpot } = useSurfSpots(userId);
   const [selectedCity, setSelectedCity] = useState("");
   const [showSpotForm, setShowSpotForm] = useState(false);
@@ -37,9 +30,18 @@ export const SurfSpots = ({ userId }: { userId: number }) => {
   };
 
   return (
-    <div>
-      <h3>{selectedCity ? `${selectedCity}` : "Your Surf Spots"}</h3>
-      <button onClick={() => setShowSpotForm(true)}>Add Spot</button>
+    <div className="flex-col items-center">
+      <div className="flex justify-evenly">
+        <h3 className="text-myBlack text-4xl">
+          {selectedCity ? `${selectedCity}` : "Your Surf Spots"}
+        </h3>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          onClick={() => setShowSpotForm(true)}
+        >
+          Add Spot
+        </button>
+      </div>
       {showSpotForm && (
         <AddSpotForm
           createSpot={handleCreateSurfSpot}
@@ -50,21 +52,27 @@ export const SurfSpots = ({ userId }: { userId: number }) => {
         />
       )}
       {selectedCity && (
-        <button onClick={() => selectCity("")}>Show Cities</button>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          onClick={() => selectCity("")}
+        >
+          Show Cities
+        </button>
       )}
-
-      {selectedCity
-        ? surfSpots
-            .filter((spot: SurfSpot) => spot.city === selectedCity)
-            .map((spot: SurfSpot) => <SpotCard key={spot.id} spot={spot} />)
-        : Object.keys(cities).map((city) => (
-            <CityCard
-              key={city}
-              selectCity={selectCity}
-              city={city}
-              spots={cities[city]}
-            />
-          ))}
+      <div className="flex flex-wrap gap-2 max-w-lg">
+        {selectedCity
+          ? surfSpots
+              .filter((spot: SurfSpot) => spot.city === selectedCity)
+              .map((spot: SurfSpot) => <SpotCard key={spot.id} spot={spot} />)
+          : Object.keys(cities).map((city) => (
+              <CityCard
+                key={city}
+                selectCity={selectCity}
+                city={city}
+                spots={cities[city]}
+              />
+            ))}
+      </div>
     </div>
   );
 };
