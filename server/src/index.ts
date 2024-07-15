@@ -24,6 +24,7 @@ const startServer = async () => {
     //await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
     await sequelize.authenticate();
+    await sequelize.sync({ force: true });
     console.log("Database connected");
     app.listen(process.env.PORT, () => {
       console.log(`Server running on http://localhost:${process.env.PORT}`);
