@@ -30,7 +30,8 @@ export const createSession = async (req: Request, res: Response) => {
   try {
     const newSession = await Session.create({
       userId,
-      location: session.location,
+      city: session.city,
+      spotName: session.spotName,
       rating: session.rating,
       //conditions: session.conditions,
     });

@@ -13,11 +13,13 @@ class Friend extends Model {
     username: string;
     status?: {
       status: number;
-      location?: string | null;
+      spotName?: string | null;
+      city?: string | null;
       rating?: number | null;
     };
   };
 }
+
 Friend.init(
   {
     userId: {
@@ -53,5 +55,6 @@ User.belongsToMany(User, {
   foreignKey: "friendId",
   otherKey: "userId",
 });
+
 Friend.belongsTo(User, { foreignKey: "friendId", as: "info" });
 export default Friend;

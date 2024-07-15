@@ -17,6 +17,7 @@ import {
   getAllUserSurfSpots,
   createSurfSpot,
   incrementSurfSpot,
+  deleteSurfSpot,
 } from "./controllers/surfSpotsController";
 import { getForecast } from "./controllers/forecastController";
 
@@ -40,4 +41,6 @@ router.post("/sessions", createSession);
 router.get("/spots/:userId", getAllUserSurfSpots);
 router.post("/spots", createSurfSpot);
 router.put("/spots/:id", incrementSurfSpot);
+router.delete("/spots/:id", deleteSurfSpot);
+
 export default router;

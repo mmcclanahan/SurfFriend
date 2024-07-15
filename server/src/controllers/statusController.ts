@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import UserStatus from "../models/UserStatus";
 
 export const updateStatus = async (req: Request, res: Response) => {
-  const { userId, status, location, rating } = req.body;
+  const { userId, status, city, spotName, rating } = req.body;
   try {
     const newStatus = await UserStatus.update(
       {
         userId,
         status,
-        location,
+        city,
+        spotName,
         rating,
       },
       { where: { userId } }

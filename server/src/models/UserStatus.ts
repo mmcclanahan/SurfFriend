@@ -7,7 +7,11 @@ const UserStatus = sequelize.define("UserStatus", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  location: {
+  city: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  spotName: {
     type: DataTypes.STRING,
     allowNull: true,
   },

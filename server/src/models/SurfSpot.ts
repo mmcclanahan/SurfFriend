@@ -5,8 +5,8 @@ import User from "./User";
 class SurfSpot extends Model {
   declare id: number;
   userId!: number;
-  name!: string;
   city!: string;
+  spotName!: string;
   timesSurfed!: number;
 }
 
@@ -20,11 +20,11 @@ SurfSpot.init(
         key: "id",
       },
     },
-    name: {
+    city: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    city: {
+    spotName: {
       type: DataTypes.STRING,
       allowNull: false,
     },

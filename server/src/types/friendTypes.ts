@@ -21,6 +21,7 @@ export interface FlattenedFriend {
   updatedAt: Date;
   username: string;
   status: string;
-  location: string | null;
+  spotName: string | null;
+  city: string | null;
   rating: number | null;
 }

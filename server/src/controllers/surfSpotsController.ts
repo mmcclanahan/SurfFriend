@@ -15,10 +15,10 @@ export const getAllUserSurfSpots = async (req: Request, res: Response) => {
 
 export const createSurfSpot = async (req: Request, res: Response) => {
   try {
-    const { userId, name, city } = req.body;
+    const { userId, spotName, city } = req.body;
     const newSurfSpot = await SurfSpot.create({
       userId,
-      name,
+      spotName,
       city,
       timesSurfed: 0,
     });
@@ -37,6 +37,21 @@ export const incrementSurfSpot = async (req: Request, res: Response) => {
       surfSpot.timesSurfed += 1;
       await surfSpot.save();
       res.status(200).send(surfSpot);
+    } else {
+      res.status(404).send("Surf spot not found");
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+export const deleteSurfSpot = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const surfSpot = await SurfSpot.findByPk(id);
+    if (surfSpot) {
+      await surfSpot.destroy();
+      res.status(200).send("Surf spot deleted");
     } else {
       res.status(404).send("Surf spot not found");
     }

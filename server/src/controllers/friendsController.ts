@@ -18,7 +18,7 @@ export const getFriends = async (req: Request, res: Response) => {
             {
               model: UserStatus,
               as: "status",
-              attributes: ["status", "location", "rating"],
+              attributes: ["status", "city", "spotName", "rating"],
             },
           ],
         },
@@ -34,7 +34,8 @@ export const getFriends = async (req: Request, res: Response) => {
           updatedAt: friend.updatedAt,
           username: friend.info?.username,
           status: friend.info?.status?.status,
-          location: friend.info?.status?.location,
+          city: friend.info?.status?.city,
+          spotName: friend.info?.status?.spotName,
           rating: friend.info?.status?.rating,
         };
       } else {

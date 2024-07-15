@@ -19,7 +19,8 @@ export const createUser = async (req: Request, res: Response) => {
       {
         userId: newUser.id,
         status: 1,
-        location: "",
+        city: "Create",
+        spotName: "a surf spot first",
         rating: 0,
       },
       { transaction: t }

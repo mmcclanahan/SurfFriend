@@ -5,7 +5,8 @@ import User from "./User";
 class Session extends Model {
   declare id: number;
   userId!: number;
-  location!: string;
+  city!: string;
+  spotName!: string;
   rating!: number;
   conditions?: string;
 }
@@ -20,7 +21,11 @@ Session.init(
         key: "id",
       },
     },
-    location: {
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    spotName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
