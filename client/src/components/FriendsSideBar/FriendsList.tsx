@@ -11,8 +11,6 @@ export const FriendsList = ({ userId }: { userId: number }) => {
 
   if (friendsQuery.isLoading) return <Loading />;
   if (friendsQuery.isError) return <div>Error</div>;
-  if (!friendsQuery.data || friendsQuery.data.length === 0)
-    return <div>No friends</div>;
 
   return (
     <div className="friendSideBar">
@@ -32,11 +30,19 @@ export const FriendsList = ({ userId }: { userId: number }) => {
         >
           Add Friend
         </button>
-        <ul>
-          {friendsQuery.data?.map((friend: Friend) => (
-            <FriendCard key={friend.friendId} userId={userId} friend={friend} />
-          ))}
-        </ul>
+        {friendsQuery.data.length === 0 ? (
+          <div className="items-center content-center">No Friends</div>
+        ) : (
+          <ul>
+            {friendsQuery.data?.map((friend: Friend) => (
+              <FriendCard
+                key={friend.friendId}
+                userId={userId}
+                friend={friend}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

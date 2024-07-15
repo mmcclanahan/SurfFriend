@@ -18,9 +18,9 @@ export const FriendCard = ({
   };
   const statusText: { [key: number]: string } = {
     1: "Not surfing",
-    2: `Checking the waves at ${friend.location}`,
-    3: `In the water at ${friend.location}`,
-    4: `Done surfing at ${friend.location} Rating: ${friend.rating}`,
+    2: `Checking the waves at ${friend.spotName} in ${friend.city}`,
+    3: `In the water at ${friend.spotName} in ${friend.city}`,
+    4: `Done surfing at ${friend.spotName} in ${friend.city} Rating: ${friend.rating}`,
   };
 
   return (
