@@ -1,39 +1,64 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Loading } from "../components/Loading";
 import { StatusForm, Session } from "../types/types";
-import { useUserStatus } from "../hooks/useUserStatus";
 import { createSession } from "../API/sessions";
 import { useNavigate } from "react-router-dom";
+import { useUserStatus } from "../hooks/useUserStatus";
+import { useSurfSpots } from "../hooks/useSurfSpots";
+import { useNotification } from "../components/NotificationHeader";
+import { createCityAndSpotNamesObj } from "../utils/spotFormFns";
 
 export const StatusPage = ({ userId }: { userId: number }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(1);
-  const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
+  const [spotName, setSpotName] = useState("");
   const [rating, setRating] = useState(3);
-
+  const { surfSpotsQuery } = useSurfSpots(userId);
   const { statusQuery, updateStatusMutation } = useUserStatus(userId);
+  const { showNotification, Notification } = useNotification();
+
+  const surfSpots = surfSpotsQuery.data || [];
+
+  const cityAndSpotNames = useMemo(() => {
+    return createCityAndSpotNamesObj(surfSpots);
+  }, [surfSpots]);
 
   useEffect(() => {
-    if (statusQuery.data) {
-      setStatus(statusQuery.data.status);
-      setLocation(statusQuery.data.location);
-      setRating(statusQuery.data.rating);
+    if (statusQuery.data && surfSpotsQuery.data) {
+      const defaultCity =
+        surfSpotsQuery.data.length > 0 ? surfSpotsQuery.data[0].city : "";
+      const defaultSpotName =
+        surfSpotsQuery.data.length > 0 ? surfSpotsQuery.data[0].spotName : "";
+      if (statusQuery.data.city === "") {
+        setCity(defaultCity);
+        setSpotName(defaultSpotName);
+      } else {
+        setStatus(statusQuery.data.status);
+        setCity(statusQuery.data.city);
+        setSpotName(statusQuery.data.spotName);
+        setRating(statusQuery.data.rating);
+      }
     }
-  }, [statusQuery.data]);
+  }, [statusQuery.data, surfSpotsQuery.data]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const statusForm: StatusForm = {
       status,
-      location,
+      city,
+      spotName,
       rating,
     };
+    console.log("submit hit", statusForm);
     updateStatusMutation.mutate(statusForm);
     if (status === 4) {
       const session: Session = {
-        location,
+        city,
+        spotName,
         rating,
       };
+
       createSession(userId, session);
     }
     navigate("/");
@@ -42,22 +67,30 @@ export const StatusPage = ({ userId }: { userId: number }) => {
 
   const handleStatusChange = (status: number) => {
     setStatus(status);
-    if (status === 1) {
-      setLocation("");
-    }
     if (status < 4 && rating !== 0) {
       setRating(0);
     }
   };
 
-  if (statusQuery.isLoading) return <Loading />;
+  if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
+  //want to create an object that has the cities as keys with array of its spotNames as values
+  //then use that object to populate the select options
+  //if the user changes the city, the spotName select options will change to the respective city
+  if (surfSpots.length === 0) {
+    showNotification("Create a Surf Spot First", "red");
+    return (
+      <div>
+        <Notification />
+      </div>
+    );
+  }
   return (
-    <div className="statusPage">
-      <h1>Update Status</h1>
+    <div className="flex flex-col items-center">
       <form className="statusForm" onSubmit={handleSubmit}>
-        <div className="formDivs">
-          <label htmlFor="status" className="formLabels">
+        <h1 className="text-5xl">Update Status</h1>
+        <div className="flex flex-col">
+          <label htmlFor="status" className="text-xl">
             Status
           </label>
           <select
@@ -73,31 +106,57 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             <option value={4}>Done Surfing</option>
           </select>
         </div>
-        <div className="formDivs">
-          <label htmlFor="location" className="formLabels">
-            Surf Spot
+        <div className="flex flex-col">
+          <label htmlFor="city" className="text-xl">
+            City
           </label>
-          <input
-            id="location"
-            value={location}
+          <select
+            id="city"
+            value={city}
             onChange={(e) => {
-              setLocation(e.target.value);
+              setCity(e.target.value);
+              setSpotName(cityAndSpotNames[e.target.value][0]);
             }}
             disabled={status === 1}
-          />
+          >
+            {Object.keys(cityAndSpotNames).map((cityOption: string) => (
+              <option key={cityOption} value={cityOption}>
+                {cityOption}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="spotName" className="text-xl">
+            Spot Name
+          </label>
+          <select
+            id="spotName"
+            value={spotName}
+            onChange={(e) => setSpotName(e.target.value)}
+            disabled={status === 1}
+          >
+            {cityAndSpotNames[city]?.map((spot) => (
+              <option key={spot} value={spot}>
+                {spot}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="formDivs">
-          <label htmlFor="rating" className="formLabels">
+          <label htmlFor="rating" className="text-xl">
             Rating
           </label>
-          <div className="btnDivs">
+          <div className="flex gap-20">
             {[1, 2, 3, 4, 5].map((value) => (
               <button
                 key={value}
                 type="button"
-                className={
-                  statusQuery.data.rating === value ? "selectedBtn" : ""
-                }
+                className={`w-10 h-10 flex items-center justify-center border rounded-md ${
+                  rating === value
+                    ? "bg-myGreen text-myBlack"
+                    : "bg-myGray text-white"
+                } hover:bg-myGreenHover hover:text-myBlack`}
                 onClick={() => {
                   setRating(value);
                 }}
@@ -108,7 +167,12 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             ))}
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <button
+          className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+          type="submit"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

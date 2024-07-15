@@ -16,3 +16,8 @@ export const incrementSurfSpot = async (id: number) => {
   const { data } = await axios.put(`${URL}/spots/${id}`);
   return data;
 };
+
+export const deleteSurfSpot = async (id: number) => {
+  const { data } = await axios.delete(`${URL}/spots/${id}`);
+  return data;
+};

@@ -11,7 +11,8 @@ export const updateStatus = async (userId: number, StatusForm: StatusForm) => {
   const { data } = await axios.put(`${URL}/status`, {
     userId,
     status: StatusForm.status,
-    location: StatusForm.location,
+    city: StatusForm.city,
+    spotName: StatusForm.spotName,
     rating: StatusForm.rating,
   });
   return data;

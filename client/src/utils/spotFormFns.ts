@@ -1,3 +1,5 @@
+import { SurfSpot } from "../types/types";
+
 export const doesNameExist = (name: string, list: string[]) => {
   const lowerCaseNoSpaceText = name.toLowerCase().replace(/\s+/g, "");
   const existingString = list.find(
@@ -20,4 +22,16 @@ export const checkMatchingText = (originalString: string, list: string[]) => {
     return existingString;
   }
   return originalString;
+};
+
+export const createCityAndSpotNamesObj = (surfSpots: SurfSpot[]) => {
+  const returnObj: { [key: string]: string[] } = {};
+  surfSpots.forEach((spot) => {
+    if (returnObj[spot.city]) {
+      returnObj[spot.city].push(spot.spotName);
+    } else {
+      returnObj[spot.city] = [spot.spotName];
+    }
+  });
+  return returnObj;
 };

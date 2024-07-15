@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStatus, updateStatus } from "../API/status";
 import { StatusForm } from "../types/types";
+
 export const useUserStatus = (userId: number) => {
   const queryClient = useQueryClient();
 
@@ -8,9 +9,11 @@ export const useUserStatus = (userId: number) => {
     queryKey: ["status"],
     queryFn: () => getStatus(userId),
   });
+
   const updateStatusMutation = useMutation({
     mutationFn: (statusForm: StatusForm) => updateStatus(userId, statusForm),
     onSuccess: () => {
+      console.log("mutation hit");
       queryClient.invalidateQueries({ queryKey: ["status"] });
     },
   });
