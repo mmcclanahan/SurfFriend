@@ -10,13 +10,11 @@ const userObj = {
   email: "user1@gmail.com",
   password: "password",
 };
-
 const userObj2 = {
   username: "user2",
   email: "user2@gmail.com",
   password: "password",
 };
-
 const userObj3 = {
   username: "user3",
   email: "user3@gmail.com",
@@ -27,6 +25,7 @@ const userObj4 = {
   email: "user4@gmail.com",
   password: "password",
 };
+
 const users = [userObj, userObj2, userObj3, userObj4];
 
 const friendObjs = [
@@ -66,79 +65,68 @@ const statusObjs = [
   {
     userId: 1,
     status: 1,
-    location: "",
+    city: "",
+    spotName: "",
     rating: 0,
   },
   {
     userId: 2,
     status: 2,
-    location: "12th St",
+    city: "Huntington Beach",
+    spotName: "12th St",
     rating: 0,
   },
   {
     userId: 3,
     status: 3,
-    location: "33rd St",
+    city: "Huntington Beach",
+    spotName: "33rd St",
     rating: 0,
   },
   {
     userId: 4,
     status: 4,
-    location: "34th St",
+    city: "Newport Beach",
+    spotName: "34th St",
     rating: 3,
   },
 ];
+
 const spots = [
   {
-    userId: 1,
-    name: "North Side",
-    city: "Huntington Beach",
-    timesSurfed: 10,
-  },
-  {
-    userId: 1,
-    name: "South Side",
-    city: "Huntington Beach",
-    timesSurfed: 5,
-  },
-  {
-    userId: 1,
-    name: "Blackies",
-    city: "Newport Beach",
-    timesSurfed: 3,
-  },
-  {
     userId: 2,
-    name: "The Wedge",
     city: "Newport Beach",
+    spotName: "The Wedge",
     timesSurfed: 10,
   },
   {
     userId: 2,
-    name: "HB Pier",
     city: "Huntington Beach",
+    spotName: "HB Pier",
     timesSurfed: 5,
   },
   {
     userId: 3,
-    name: "Goldenwest",
     city: "Huntington Beach",
+    spotName: "Goldenwest",
     timesSurfed: 3,
   },
 ];
+
 const fill = async (
   users: { username: string; email: string; password: string }[],
   friendObjs: { userId: number; friendId: number }[],
   statusObjs: {
     userId: number;
     status: number;
-    location?: string | null;
+    city?: string;
+    spotName?: string;
     rating?: number;
   }[],
   spots: {
     userId: number;
-    name: string;
     city: string;
+    spotName: string;
     timesSurfed: number;
   }[]
 ) => {
@@ -153,10 +141,15 @@ const fill = async (
     console.log("friends filled");
     await UserStatus.bulkCreate(statusObjs);
     console.log("status filled");
-    await Session.create({ userId: 1, location: "12th St", rating: 3 });
+    await Session.create({
+      userId: 1,
+      city: "Huntington Beach",
+      spotName: "North Side",
+      rating: 3,
+    });
     console.log("session filled");
-    await SurfSpot.bulkCreate(spots);
-    console.log("spots filled");
+    //await SurfSpot.bulkCreate(spots);
+    //console.log("spots filled");
   } catch (error) {
     console.log(error);
   }
