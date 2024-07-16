@@ -5,7 +5,7 @@ import { createSession } from "../API/sessions";
 import { useNavigate } from "react-router-dom";
 import { useUserStatus } from "../hooks/useUserStatus";
 import { useSurfSpots } from "../hooks/useSurfSpots";
-import { useNotification } from "../components/NotificationHeader";
+import { useNotification } from "../hooks/NotificationContext";
 import { createCityAndSpotNamesObj } from "../utils/spotFormFns";
 
 export const StatusPage = ({ userId }: { userId: number }) => {
@@ -16,7 +16,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   const [rating, setRating] = useState(3);
   const { surfSpotsQuery } = useSurfSpots(userId);
   const { statusQuery, updateStatusMutation } = useUserStatus(userId);
-  const { showNotification, Notification } = useNotification();
+  const { showNotification } = useNotification();
 
   const surfSpots = surfSpotsQuery.data || [];
 
@@ -50,7 +50,6 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       spotName,
       rating,
     };
-    console.log("submit hit", statusForm);
     updateStatusMutation.mutate(statusForm);
     if (status === 4) {
       const session: Session = {
@@ -62,7 +61,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       createSession(userId, session);
     }
     navigate("/");
-    //notification here
+    showNotification("Status Updated", 1);
   };
 
   const handleStatusChange = (status: number) => {
@@ -74,17 +73,6 @@ export const StatusPage = ({ userId }: { userId: number }) => {
 
   if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
-  //want to create an object that has the cities as keys with array of its spotNames as values
-  //then use that object to populate the select options
-  //if the user changes the city, the spotName select options will change to the respective city
-  if (surfSpots.length === 0) {
-    showNotification("Create a Surf Spot First", "red");
-    return (
-      <div>
-        <Notification />
-      </div>
-    );
-  }
   return (
     <div className="flex flex-col items-center">
       <form className="statusForm" onSubmit={handleSubmit}>

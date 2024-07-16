@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { SurfSpot } from "../../types/types";
-import { useNotification } from "../NotificationHeader";
+import { useNotification } from "../../hooks/NotificationContext";
 import { AddSpotFormProps } from "../../types/types";
 import { doesNameExist, checkMatchingText } from "../../utils/spotFormFns";
 import { Modal } from "../Modal";
@@ -12,11 +12,12 @@ export const AddSpotForm = ({
   cities,
   surfSpots,
 }: AddSpotFormProps) => {
-  const { showNotification, Notification } = useNotification();
   const [selectedCity, setSelectedCity] = useState(city || "Other");
   const [newCity, setNewCity] = useState("");
   const [name, setName] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const { showNotification } = useNotification();
+
   useEffect(() => {
     setSelectedCity(city || "Other");
     setNewCity("");
@@ -39,7 +40,7 @@ export const AddSpotForm = ({
           .map((spot) => spot.spotName)
       )
     ) {
-      showNotification("Spot already exists", "red");
+      showNotification("Spot already exists", 0);
       return;
     }
 
@@ -55,7 +56,7 @@ export const AddSpotForm = ({
       city: city,
     };
     createSpot(surfSpot);
-    showNotification("Spot added successfully!", "green");
+    showNotification("Spot added successfully!", 1);
     setShowModal(false);
   };
   const handleSelectEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,7 +66,6 @@ export const AddSpotForm = ({
 
   return (
     <div>
-      <Notification />
       <button
         className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
         onClick={() => setShowModal(true)}

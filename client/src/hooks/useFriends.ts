@@ -34,11 +34,7 @@ export const useFriends = (userId: number) => {
       queryClient.invalidateQueries({ queryKey: ["friends"] });
     },
   });
-
-  const handleAddFriend = (friendUsername: string) => {
-    createFriendRequestMutation.mutate(friendUsername);
-  };
-
+  // use async // mutateAsync // try catch block to return values and errors to the component
   const handleConfirmFriend = (friendId: number) => {
     confirmFriendRequestMutation.mutate(friendId);
   };
@@ -52,7 +48,6 @@ export const useFriends = (userId: number) => {
     createFriendRequestMutation,
     confirmFriendRequestMutation,
     deleteFriendMutation,
-    handleAddFriend,
     handleConfirmFriend,
     handleDeleteFriend,
   };

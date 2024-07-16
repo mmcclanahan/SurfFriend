@@ -13,7 +13,6 @@ export const useUserStatus = (userId: number) => {
   const updateStatusMutation = useMutation({
     mutationFn: (statusForm: StatusForm) => updateStatus(userId, statusForm),
     onSuccess: () => {
-      console.log("mutation hit");
       queryClient.invalidateQueries({ queryKey: ["status"] });
     },
   });

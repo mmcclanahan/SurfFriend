@@ -1,18 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useSurfSpots } from "../hooks/useSurfSpots";
-import { useNotification } from "./NotificationHeader";
+import { useNotification } from "../hooks/NotificationContext";
 import "../styles/layout.css";
 import "../index.css";
 
 export const Header = () => {
   const navigate = useNavigate();
-
-  const { showNotification, Notification } = useNotification();
+  const { showNotification } = useNotification();
   const { surfSpotsQuery } = useSurfSpots(1);
 
   const clickStatus = () => {
     if (surfSpotsQuery.data.length === 0) {
-      showNotification("Make a Surf Spot first!", "red");
+      showNotification("Make a Surf Spot first!", 0);
       return;
     } else {
       navigate("/status");
@@ -21,7 +20,6 @@ export const Header = () => {
 
   return (
     <div className="header p-4 bg-myGray h-20">
-      <Notification />
       <h1
         className="text-myBlack text-4xl cursor-pointer"
         onClick={() => navigate("/")}
