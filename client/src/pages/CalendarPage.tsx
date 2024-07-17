@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import { getSessions } from "../API/sessions";
+import { getAllSessions } from "../API/sessions";
+import "react-calendar/dist/Calendar.css";
+import { Session } from "../types/types";
 
-export const CalendarPage = () => {
-  //get current date
-  //show a calender for the current month
-  //show time and rating and location for the incoming sessions
-  //color code the sessions based on the rating
+export const CalendarPage = ({ userId }: { userId: number }) => {
   const [value, setValue] = useState(new Date());
-  const [sessions, setSessions] = useState([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
 
   useEffect(() => {
-    // Fetch session data when the component mounts
-    const fetchSessions = async () => {
-      const sessionData = await getSessions(1, 12);
-      setSessions(sessionData);
-    };
-
-    fetchSessions();
-  }, []);
+    getAllSessions(userId)
+      .then((allSessions) => {
+        setSessions(allSessions);
+        console.log(allSessions);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [userId]);
 
   // Helper function to check if two dates are the same day
-  const isSameDay = (d1, d2) => {
+  const isSameDay = (d1: Date, d2: Date) => {
     return (
       d1.getFullYear() === d2.getFullYear() &&
       d1.getMonth() === d2.getMonth() &&
@@ -33,18 +32,13 @@ export const CalendarPage = () => {
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       const session = sessions.find((session) =>
-        isSameDay(new Date(session.date), date)
+        isSameDay(new Date(session.createdAt), date)
       );
       if (session) {
-        return (
-          <div style={{ backgroundColor: getColorForRating(session.rating) }}>
-            <p>{session.date}</p>
-            <p>{session.location}</p>
-            <p>Rating: {session.rating}</p>
-          </div>
-        );
+        return <div className="dot"></div>;
       }
     }
+    return null;
   };
 
   // Function to provide background color based on rating
@@ -69,5 +63,14 @@ export const CalendarPage = () => {
     setValue(value);
   };
 
-  return <Calendar onChange={change} value={value} tileContent={tileContent} />;
+  return (
+    <div className="flex justify-center bg-myBlack min-h-screen">
+      <Calendar
+        className="bg-myGray rounded shadow-white shadow-md p-5 mt-20 max-h-96 max-w-96"
+        onChange={change}
+        value={value}
+        tileContent={tileContent}
+      />
+    </div>
+  );
 };

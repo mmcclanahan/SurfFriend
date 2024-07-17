@@ -37,6 +37,7 @@ router.put("/status", updateStatus);
 router.get("/sessions/:userId", getAllSessions);
 router.get("/sessions/:userId/:monthNumber", getSessionsForMonth);
 router.post("/sessions", createSession);
+//router.delete("/sessions", deleteSession);
 //surf spot routes
 router.get("/spots/:userId", getAllUserSurfSpots);
 router.post("/spots", createSurfSpot);

@@ -46,7 +46,7 @@ export const FriendsList = ({ userId }: { userId: number }) => {
             I
           </button>
         </div>
-        {friendsQuery.data.length === 0 ? (
+        {friendsQuery.data?.length === 0 ? (
           <div className="items-center content-center">No Friends</div>
         ) : (
           <ul>

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Session from "../models/Session";
 
+//find by current year and month implicitly include year because month is included explicitly by user from front end
 export const getSessionsForMonth = async (req: Request, res: Response) => {
   const { userId, monthNumber } = req.params;
   try {
