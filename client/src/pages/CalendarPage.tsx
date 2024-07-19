@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { getAllSessions } from "../API/sessions";
-import "react-calendar/dist/Calendar.css";
+import "../styles/calendarPage.css";
 import { Session } from "../types/types";
 
 export const CalendarPage = ({ userId }: { userId: number }) => {
@@ -12,7 +12,6 @@ export const CalendarPage = ({ userId }: { userId: number }) => {
     getAllSessions(userId)
       .then((allSessions) => {
         setSessions(allSessions);
-        console.log(allSessions);
       })
       .catch((error) => {
         console.error(error);
@@ -28,48 +27,56 @@ export const CalendarPage = ({ userId }: { userId: number }) => {
     );
   };
 
+  const ratingColorBank = {
+    1: "cal-1",
+    2: "cal-2",
+    3: "cal-3",
+    4: "cal-4",
+    5: "cal-5",
+  };
+
   // Function to provide content for calendar tiles
   const tileContent = ({ date, view }) => {
     if (view === "month") {
-      const session = sessions.find((session) =>
+      const session = sessions.find((session: Session) =>
         isSameDay(new Date(session.createdAt), date)
       );
       if (session) {
-        return <div className="dot"></div>;
+        return (
+          <div style={{ position: "relative", height: "100%" }}>
+            <span
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                height: "10px",
+                width: "10px",
+                backgroundColor: "red",
+                borderRadius: "50%",
+              }}
+            ></span>
+          </div>
+        );
       }
     }
     return null;
   };
 
-  // Function to provide background color based on rating
-  const getColorForRating = (rating) => {
-    switch (rating) {
-      case 1:
-        return "red";
-      case 2:
-        return "orange";
-      case 3:
-        return "yellow";
-      case 4:
-        return "lightgreen";
-      case 5:
-        return "green";
-      default:
-        return "white";
-    }
-  };
-
   const change = (value) => {
     setValue(value);
   };
+  //bigger calender to fill more of the screen
+  //want all the days to be the same size just bigger
 
   return (
     <div className="flex justify-center bg-myBlack min-h-screen">
       <Calendar
-        className="bg-myGray rounded shadow-white shadow-md p-5 mt-20 max-h-96 max-w-96"
+        className="calendar max-h-96 w-full max-w-3xl"
         onChange={change}
         value={value}
         tileContent={tileContent}
+        calendarType="gregory"
       />
     </div>
   );
