@@ -24,7 +24,7 @@ export interface Session {
   spotName: string;
   rating: number;
   conditions?: string;
-  createdAt?: string;
+  createdAt: string;
 }
 
 export interface SurfSpot {

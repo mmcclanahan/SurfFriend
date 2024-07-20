@@ -1,14 +1,20 @@
 import Badge from "@mui/material/Badge";
-import { getDate } from "date-fns";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+import { isSameDay } from "date-fns";
 
-export const SessionDay = (
-  props: PickersDayProps<Date> & { highlightedDays?: number[] }
-) => {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+interface SessionDayProps extends PickersDayProps<Date> {
+  highlightedDays: Date[];
+}
 
-  const isHighlighted =
-    !outsideCurrentMonth && highlightedDays.indexOf(getDate(day)) >= 0;
+export const SessionDay = ({
+  highlightedDays,
+  day,
+  outsideCurrentMonth,
+  ...other
+}: SessionDayProps) => {
+  const isHighlighted = highlightedDays.some((highlightedDay) =>
+    isSameDay(day, highlightedDay)
+  );
 
   return (
     <Badge
