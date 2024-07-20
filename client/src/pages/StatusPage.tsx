@@ -74,7 +74,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col justify-between bg-myGray rounded shadow-white shadow-md p-5 mt-20 h-full w-full max-w-xl max-h-xl">
       <form className="statusForm" onSubmit={handleSubmit}>
         <h1 className="text-5xl">Update Status</h1>
         <div className="flex flex-col">

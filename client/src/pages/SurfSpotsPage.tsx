@@ -45,50 +45,48 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
   };
 
   return (
-    <div className="flex justify-center bg-myBlack min-h-screen">
-      <div className="flex flex-col justify-between bg-myGray rounded shadow-white shadow-md p-5 mt-20 max-h-96 max-w-96">
-        <h3 className="text-myBlack text-4xl self-center">
-          {selectedCity !== "Other" ? `${selectedCity}` : "Your Surf Spots"}
-        </h3>
-        <div className="flex justify-between">
-          {selectedCity !== "Other" && (
-            <button
-              className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded"
-              onClick={() => selectCity("Other")}
-            >
-              Show Cities
-            </button>
-          )}
-          <AddSpotForm
-            createSpot={handleCreateSurfSpot}
-            userId={userId}
-            cities={Object.keys(cities)}
-            surfSpots={surfSpots}
-            city={selectedCity}
-          />
-        </div>
-        <div className="self-center border border-myBlack bg-myBlack rounded flex flex-wrap overflow-auto justify-center items-center gap-2 p-2 mt-1">
-          {selectedCity !== "Other" ? (
-            spots.map((spot: SurfSpot) => (
-              <SpotCard
-                key={spot.id}
-                deleteSurfSpot={deleteSurfSpot}
-                spot={spot}
-              />
-            ))
-          ) : cityList.length === 0 ? (
-            <EmptyCard />
-          ) : (
-            cityList.map((city) => (
-              <CityCard
-                key={city}
-                selectCity={selectCity}
-                city={city}
-                spots={cities[city]}
-              />
-            ))
-          )}
-        </div>
+    <div className="flex flex-col justify-between bg-myGray rounded shadow-white shadow-md p-5 mt-20 h-full w-full max-w-xl max-h-xl">
+      <h3 className="text-myBlack text-4xl self-center">
+        {selectedCity !== "Other" ? `${selectedCity}` : "Your Surf Spots"}
+      </h3>
+      <div className="flex justify-between">
+        {selectedCity !== "Other" && (
+          <button
+            className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded"
+            onClick={() => selectCity("Other")}
+          >
+            Show Cities
+          </button>
+        )}
+        <AddSpotForm
+          createSpot={handleCreateSurfSpot}
+          userId={userId}
+          cities={Object.keys(cities)}
+          surfSpots={surfSpots}
+          city={selectedCity}
+        />
+      </div>
+      <div className="self-center border border-myBlack bg-myBlack rounded flex flex-wrap overflow-auto justify-center items-center gap-2 p-2 mt-1">
+        {selectedCity !== "Other" ? (
+          spots.map((spot: SurfSpot) => (
+            <SpotCard
+              key={spot.id}
+              deleteSurfSpot={deleteSurfSpot}
+              spot={spot}
+            />
+          ))
+        ) : cityList.length === 0 ? (
+          <EmptyCard />
+        ) : (
+          cityList.map((city) => (
+            <CityCard
+              key={city}
+              selectCity={selectCity}
+              city={city}
+              spots={cities[city]}
+            />
+          ))
+        )}
       </div>
     </div>
   );
