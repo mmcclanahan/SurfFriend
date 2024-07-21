@@ -1,19 +1,14 @@
 import { Session } from "../../types/types";
+import { SessionCard } from "./SessionCard";
 
-export const SessionView = ({ session }: { session: Session[] | null }) => {
+export const SessionView = ({ sessions }: { sessions: Session[] }) => {
   return (
-    <div className="session-view">
-      {session === null ? (
+    <div className="session-view bg-myGray border border-red-600">
+      {sessions.length === 0 ? (
         <p>No session</p>
       ) : (
-        session.map((session) => (
-          <div key={session.createdAt} className="session">
-            <p>Date: {new Date(session.createdAt).toLocaleDateString()}</p>
-            <p>City: {session.city}</p>
-            <p>Spot Name: {session.spotName}</p>
-            <p>Rating: {session.rating}</p>
-            <p>Conditions: null</p>
-          </div>
+        sessions.map((session) => (
+          <SessionCard key={session.createdAt} session={session} />
         ))
       )}
     </div>

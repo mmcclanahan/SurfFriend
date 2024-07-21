@@ -1,25 +1,40 @@
 import Badge from "@mui/material/Badge";
-import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+import { PickersDay, PickersDayProps } from "@mui/x-date-pickers";
 import { isSameDay } from "date-fns";
+import { Session } from "../../types/types";
 
 interface SessionDayProps extends PickersDayProps<Date> {
-  highlightedDays: Date[];
+  allSessions: Session[];
 }
+const ratingIcon = {
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+};
 
 export const SessionDay = ({
-  highlightedDays,
+  allSessions,
   day,
   outsideCurrentMonth,
   ...other
 }: SessionDayProps) => {
-  const isHighlighted = highlightedDays.some((highlightedDay) =>
-    isSameDay(day, highlightedDay)
+  const sessions = allSessions.filter((session) =>
+    isSameDay(day, session.createdAt)
   );
+  const rating = Math.round(
+    sessions.reduce((acc, session) => acc + session.rating, 0) / sessions.length
+  ) as 1 | 2 | 3 | 4 | 5;
+  const isHighlighted = sessions !== undefined;
+  const badgeContent = isHighlighted ? ratingIcon[rating] : undefined;
+
+  //Pickers day is the day badge is the badge that goes on top of the day
 
   return (
     <Badge
       overlap="circular"
-      badgeContent={isHighlighted ? "🌊" : undefined}
+      badgeContent={badgeContent}
       color={isHighlighted ? "primary" : "default"}
     >
       <PickersDay

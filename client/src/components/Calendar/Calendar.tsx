@@ -3,53 +3,46 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider, DateCalendar } from "@mui/x-date-pickers";
 import { getAllSessions } from "../../API/sessions";
 import { Session } from "../../types/types";
-import { getDate, parseISO, format } from "date-fns";
+import { parseISO, isSameDay } from "date-fns";
 import { SessionDay } from "./SessionDay";
 import { SessionView } from "./SessionView";
 import "../../styles/calendar.css";
 
 export const Calendar = ({ userId }: { userId: number }) => {
   const initialValue = new Date();
-  const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
-  const [value, setValue] = useState<Date | null>(initialValue);
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [session, setSession] = useState<Session[] | null>(null);
+  const [value, setValue] = useState<Date>(initialValue);
+  const [allSessions, setAllSessions] = useState<Session[]>([]);
+  const [selectedSessions, setSelectedSessions] = useState<Session[]>([]);
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const sessions = await getAllSessions(userId);
-        setSessions(sessions);
-        const daysToHighlight = sessions.map((session: Session) =>
-          parseISO(session.createdAt)
+        setAllSessions(sessions);
+        const sessionsForToday = sessions.filter((session: Session) =>
+          isSameDay(session.createdAt, value)
         );
-        setHighlightedDays(daysToHighlight);
+        setSelectedSessions(sessionsForToday);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchSessions();
   }, [userId]);
-  //make calendar wider and
-  //when value changes get the session that matches the createdAt date
+
   const handleDayClick = (newValue: Date) => {
     setValue(newValue);
-    const selectedDate = format(newValue, "yyyy-MM-dd");
-    const selectedSession = sessions.filter(
-      (session) => session.createdAt.split("T")[0] === selectedDate
+    const sessions = allSessions.filter((session) =>
+      isSameDay(session.createdAt, newValue)
     );
-    console.log(selectedDate, "selectedDate");
-    console.log(selectedSession, "selectedSession");
-    console.log(newValue, "newValue");
-    setSession(selectedSession || null);
+    setSelectedSessions(sessions);
   };
 
   return (
-    <div className="flex mt-20">
+    <div className="flex justify-between bg-myGray rounded shadow-white shadow-md p-5 mt-20 h-full w-full max-w-xl max-h-xl">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateCalendar
-          className="bg-myGray rounded shadow-white shadow-md"
+          className="border border-red-600"
           value={value}
           onChange={handleDayClick}
           onMonthChange={() => {}}
@@ -58,11 +51,11 @@ export const Calendar = ({ userId }: { userId: number }) => {
           }}
           slotProps={{
             day: {
-              highlightedDays,
+              allSessions,
             } as any,
           }}
         />
-        <SessionView session={session} />
+        <SessionView sessions={selectedSessions} />
       </LocalizationProvider>
     </div>
   );
