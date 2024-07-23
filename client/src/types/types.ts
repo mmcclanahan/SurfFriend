@@ -42,3 +42,16 @@ export interface AddSpotFormProps {
   cities: string[];
   surfSpots: SurfSpot[];
 }
+
+export interface ConfirmProps {
+  header: string;
+  confirmFn: () => void;
+  backFn: () => void;
+  info: string[];
+}
+
+export interface ModalProps {
+  show: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}

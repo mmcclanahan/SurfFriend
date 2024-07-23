@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
+import { ModalProps } from "../types/types";
 
-export const Modal = ({ show, onClose, children }) => {
+export const Modal = ({ show, onClose, children }: ModalProps) => {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -15,9 +16,7 @@ export const Modal = ({ show, onClose, children }) => {
           <button
             onClick={onClose}
             className="text-2xl text-gray-500 hover:text-gray-800"
-          >
-            &times;
-          </button>
+          ></button>
         </div>
         {children}
       </motion.div>

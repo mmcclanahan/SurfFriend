@@ -57,7 +57,6 @@ export const StatusPage = ({ userId }: { userId: number }) => {
         spotName,
         rating,
       };
-
       createSession(userId, session);
     }
     navigate("/");

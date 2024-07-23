@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Friend } from "../../types/types";
 import { useFriends } from "../../hooks/useFriends";
+import { Modal } from "../Modal";
+import { Confirm } from "../Confirm";
 
 export const FriendCard = ({
   userId,
@@ -8,6 +11,9 @@ export const FriendCard = ({
   userId: number;
   friend: Friend;
 }) => {
+  const [confirm, setConfirm] = useState(false);
+  const showConfirmDeleteModal = () => setConfirm(true);
+
   const { handleDeleteFriend, handleConfirmFriend } = useFriends(userId);
 
   const colors: { [key: number]: string } = {
@@ -27,13 +33,18 @@ export const FriendCard = ({
     <li className="friend-card">
       <div className="friendCardHeader">
         <h5 className="friendName">{friend.username}</h5>
-        <button
-          onClick={() => {
-            handleDeleteFriend(friend.friendId);
-          }}
-        >
-          x
-        </button>
+        <button onClick={showConfirmDeleteModal}>x</button>
+        <Modal show={confirm} onClose={setConfirm}>
+          <Confirm
+            header="Are you sure you want to delete this friend?"
+            backFn={() => setConfirm(false)}
+            confirmFn={() => {
+              handleDeleteFriend(friend.friendId);
+              setConfirm(false);
+            }}
+            info={friend.username}
+          />
+        </Modal>
       </div>
       <div className="friendStatus">
         {friend.request === "sent" && (
