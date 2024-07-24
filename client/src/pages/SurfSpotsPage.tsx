@@ -8,7 +8,7 @@ import { Loading } from "../components/Loading";
 import { AddSpotForm } from "../components/SurfSpots/AddSpotForm";
 
 export const SurfSpotsPage = ({ userId }: { userId: number }) => {
-  const { surfSpotsQuery, handleCreateSurfSpot, handleDeleteSurfSpot } =
+  const { surfSpotsQuery, createSurfSpotMutation, handleDeleteSurfSpot } =
     useSurfSpots(userId);
   const [selectedCity, setSelectedCity] = useState("Other");
 
@@ -59,7 +59,7 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
           </button>
         )}
         <AddSpotForm
-          createSpot={handleCreateSurfSpot}
+          createSpot={createSurfSpotMutation.mutateAsync}
           userId={userId}
           cities={Object.keys(cities)}
           surfSpots={surfSpots}

@@ -8,8 +8,12 @@ export const getAllSurfSpots = async (userId: number) => {
 };
 
 export const createSurfSpot = async (surfSpot: SurfSpot) => {
-  const { data } = await axios.post(`${URL}/spots`, surfSpot);
-  return data;
+  try {
+    const { data } = await axios.post(`${URL}/spots`, surfSpot);
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data);
+  }
 };
 
 export const incrementSurfSpot = async (id: number) => {

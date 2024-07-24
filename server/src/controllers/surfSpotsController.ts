@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
+import axios from "axios";
 import SurfSpot from "../models/SurfSpot";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const getAllUserSurfSpots = async (req: Request, res: Response) => {
   try {
@@ -16,6 +19,15 @@ export const getAllUserSurfSpots = async (req: Request, res: Response) => {
 export const createSurfSpot = async (req: Request, res: Response) => {
   try {
     const { userId, spotName, city } = req.body;
+    const validCity = await axios.get(
+      process.env.CITYCHECK_URL +
+        `placename=${city}` +
+        process.env.CITYCHECK_API_KEY
+    );
+    if (validCity.data.postalCodes.length === 0 || !validCity.data) {
+      res.status(400).send("Unable to find city. Please enter a valid city.");
+      return;
+    }
     const newSurfSpot = await SurfSpot.create({
       userId,
       spotName,

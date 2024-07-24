@@ -31,7 +31,6 @@ export const AddSpotForm = ({
     } else {
       city = selectedCity;
     }
-
     if (
       doesNameExist(
         name,
@@ -43,7 +42,6 @@ export const AddSpotForm = ({
       showNotification("Spot already exists", 0);
       return;
     }
-
     const checkedName = checkMatchingText(
       name,
       surfSpots
@@ -55,8 +53,12 @@ export const AddSpotForm = ({
       spotName: checkedName,
       city: city,
     };
-    createSpot(surfSpot);
-    showNotification("Spot added successfully!", 1);
+    try {
+      await createSpot(surfSpot);
+      showNotification("Spot added successfully!", 1);
+    } catch (error) {
+      showNotification(error.message || "Unable to find city!", 0);
+    }
     setShowModal(false);
   };
   const handleSelectEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
