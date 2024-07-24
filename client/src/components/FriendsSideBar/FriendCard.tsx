@@ -11,9 +11,9 @@ export const FriendCard = ({
   userId: number;
   friend: Friend;
 }) => {
-  const [confirm, setConfirm] = useState(false);
-  const showConfirmDeleteModal = () => setConfirm(true);
-
+  const [showModal, setShowModal] = useState(false);
+  const showConfirmDeleteModal = () => setShowModal(true);
+  const closeConfirmDeleteModal = () => setShowModal(false);
   const { handleDeleteFriend, handleConfirmFriend } = useFriends(userId);
 
   const colors: { [key: number]: string } = {
@@ -34,15 +34,15 @@ export const FriendCard = ({
       <div className="friendCardHeader">
         <h5 className="friendName">{friend.username}</h5>
         <button onClick={showConfirmDeleteModal}>x</button>
-        <Modal show={confirm} onClose={setConfirm}>
+        <Modal show={showModal} onClose={closeConfirmDeleteModal}>
           <Confirm
-            header="Are you sure you want to delete this friend?"
-            backFn={() => setConfirm(false)}
+            header={`Are you sure you want to delete ${friend.username} from your friends list?`}
+            backFn={closeConfirmDeleteModal}
             confirmFn={() => {
               handleDeleteFriend(friend.friendId);
-              setConfirm(false);
+              closeConfirmDeleteModal();
             }}
-            info={friend.username}
+            info={[]}
           />
         </Modal>
       </div>
