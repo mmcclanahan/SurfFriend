@@ -19,27 +19,27 @@ export const Header = () => {
   };
 
   return (
-    <div className="header p-4 bg-myGray h-20">
+    <div className="header p-4 h-20">
       <h1
-        className="text-myBlack text-4xl cursor-pointer"
+        className="text-[#FFCD29] text-4xl cursor-pointer"
         onClick={() => navigate("/")}
       >
         Surf Friend
       </h1>
       <button
-        className="border bg-myGreenHover text-myBlack py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
         onClick={clickStatus}
       >
         Status
       </button>
       <button
-        className="border bg-myGreenHover text-myBlack py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
         onClick={() => navigate("/")}
       >
         Surf Spots
       </button>
       <button
-        className="border bg-myGreenHover text-myBlack py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
         onClick={() => navigate("/calendar")}
       >
         Calender

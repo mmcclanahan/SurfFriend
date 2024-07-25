@@ -53,6 +53,7 @@ export const AddSpotForm = ({
       spotName: checkedName,
       city: city,
     };
+
     try {
       await createSpot(surfSpot);
       showNotification("Spot added successfully!", 1);
@@ -69,7 +70,7 @@ export const AddSpotForm = ({
   return (
     <div>
       <button
-        className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+        className="bg-[#D86B6B] hover:bg-[#D86B6B] text-black py-2 px-4 rounded "
         onClick={() => setShowModal(true)}
       >
         Add Spot

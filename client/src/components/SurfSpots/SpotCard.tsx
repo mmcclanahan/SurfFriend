@@ -8,17 +8,17 @@ export const SpotCard = ({
   deleteSurfSpot: (id: number) => void;
 }) => {
   return (
-    <div className="flex flex-col items-center border rounded shadow-md bg-myGray p-5">
-      <h4 className="font-semibold">{spot.spotName}</h4>
+    <div className="flex flex-col items-center rounded-3xl shadow-md bg-[#1A4F5C] p-5 h-[15vh]">
+      <h4 className="font-semibold text-[#FFE8A3]">{spot.spotName}</h4>
       <button
-        className="border bg-myRed hover:bg-myRedHover text-myBlack py-2 px-4 rounded"
+        className="bg-myRed hover:bg-myRedHover text-myBlack py-2 px-4 rounded"
         onClick={() => {
           deleteSurfSpot(spot.id);
         }}
       >
         Delete
       </button>
-      <p>Times Surfed: {spot.timesSurfed}</p>
+      <p className="text-[#FFE8A3]">Times Surfed: {spot.timesSurfed}</p>
     </div>
   );
 };

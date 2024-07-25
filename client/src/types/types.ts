@@ -55,3 +55,9 @@ export interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
 }
+export interface CityCardProps {
+  city: string;
+  spots: number;
+  selectCity: (city: string) => void;
+  selectedCity: string;
+}

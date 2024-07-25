@@ -9,7 +9,7 @@ export const Layout = () => {
       <NotificationProvider>
         <Header />
         <FriendsList userId={1} />
-        <div className="flex justify-center bg-myBlack min-h-screen">
+        <div className="flex justify-center min-h-screen">
           <Outlet />
         </div>
       </NotificationProvider>
