@@ -70,7 +70,7 @@ export const AddSpotForm = ({
   return (
     <div>
       <button
-        className="bg-[#D86B6B] hover:bg-[#D86B6B] text-black py-2 px-4 rounded "
+        className="bg-[#D86B6B] hover:bg-[#D86B6B] text-black py-2 px-4 rounded"
         onClick={() => setShowModal(true)}
       >
         Add Spot

@@ -1,49 +1,62 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSurfSpots } from "../hooks/useSurfSpots";
 import { useNotification } from "../hooks/NotificationContext";
-import "../styles/layout.css";
+import { HeaderButton } from "./HeaderButton";
+import SurfFriendPageLogo from "../assets/SurfFriendPageLogo.png";
 import "../index.css";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
   const { surfSpotsQuery } = useSurfSpots(1);
+  const [selected, setSelected] = useState(2);
 
-  const clickStatus = () => {
-    if (surfSpotsQuery.data.length === 0) {
-      showNotification("Make a Surf Spot first!", 0);
-      return;
-    } else {
-      navigate("/status");
+  const indexToPath = {
+    1: "/status",
+    2: "/",
+    3: "/calendar",
+  };
+
+  const clickButton = (num: number) => {
+    if (num === 1) {
+      if (surfSpotsQuery.data.length === 0) {
+        showNotification("Make a Surf Spot first!", 0);
+        return;
+      }
     }
+    navigate(indexToPath[num]);
+    setSelected(num);
   };
 
   return (
-    <div className="header p-4 h-20">
-      <h1
-        className="text-[#FFCD29] text-4xl cursor-pointer"
+    <div className="flex justify-between h-28 pr-10 pl-10 pt-2">
+      <img
+        src={SurfFriendPageLogo}
+        alt="SurfFriend Logo"
+        className="cursor-pointer h-28"
         onClick={() => navigate("/")}
-      >
-        Surf Friend
-      </h1>
-      <button
-        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
-        onClick={clickStatus}
-      >
-        Status
-      </button>
-      <button
-        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
-        onClick={() => navigate("/")}
-      >
-        Surf Spots
-      </button>
-      <button
-        className="border bg-myGreenHover text-[#FFCD29] py-2 px-4 rounded hover:bg-myGreen focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
-        onClick={() => navigate("/calendar")}
-      >
-        Calender
-      </button>
+      />
+      <div className="flex items-end gap-5">
+        <HeaderButton
+          selected={selected}
+          clickFn={clickButton}
+          index={1}
+          text={"Status"}
+        />
+        <HeaderButton
+          selected={selected}
+          clickFn={clickButton}
+          index={2}
+          text={"Surf Spots"}
+        />
+        <HeaderButton
+          selected={selected}
+          clickFn={clickButton}
+          index={3}
+          text={"Calender"}
+        />
+      </div>
     </div>
   );
 };

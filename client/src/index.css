@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Kalnia:wght@300;400;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,4 +6,23 @@
 html,
 body {
   background-color: #0a2228;
+  font-family: "Comic Neue";
+}
+
+.light {
+  font-family: "Comic Neue", cursive;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.regular {
+  font-family: "Comic Neue", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bold {
+  font-family: "Comic Neue", cursive;
+  font-weight: 700;
+  font-style: normal;
 }
