@@ -58,7 +58,10 @@ export const AddSpotForm = ({
       await createSpot(surfSpot);
       showNotification("Spot added successfully!", 1);
     } catch (error) {
-      showNotification(error.message || "Unable to find city!", 0);
+      showNotification(
+        error.message || "City doesn't exist! Is there another name?",
+        0
+      );
     }
     setShowModal(false);
   };

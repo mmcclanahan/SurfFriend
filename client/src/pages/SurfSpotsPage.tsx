@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SpotCard } from "../components/SurfSpots/SpotCard";
 import { CityCard } from "../components/SurfSpots/CityCard";
 import { EmptySpotCard } from "../components/SurfSpots/EmptySpotCard";
@@ -11,6 +11,14 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
   const { surfSpotsQuery, createSurfSpotMutation, handleDeleteSurfSpot } =
     useSurfSpots(userId);
   const [selectedCity, setSelectedCity] = useState("Other");
+
+  useEffect(() => {
+    if (surfSpotsQuery.data && surfSpotsQuery.data.length > 0) {
+      setSelectedCity(surfSpotsQuery.data[0].city);
+    } else {
+      setSelectedCity("Other");
+    }
+  }, [surfSpotsQuery.data]);
 
   if (surfSpotsQuery.isLoading) return <Loading />;
 
@@ -55,12 +63,12 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
           city={selectedCity}
         />
       </div>
-      <div className="flex gap-[2vw]">
+      <div className="flex gap-[2vw] mt-4">
         <div className="flex flex-col overflow-auto">
           <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3]">
             Cities
           </h3>
-          <div className="grid grid-cols-3 gap-[.5vw] overflow-auto">
+          <div className="grid grid-cols-3 gap-[.5vw] overflow-auto mt-2">
             {cityList.length === 0 ? (
               <EmptySpotCard />
             ) : (
@@ -80,7 +88,7 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
           <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3]">
             Surf Spots
           </h3>
-          <div className="grid grid-cols-2 gap-[.5vw]  overflow-auto">
+          <div className="grid grid-cols-3 gap-[.5vw]  overflow-auto mt-2">
             {spots.length === 0 ? (
               <EmptySpotCard />
             ) : (

@@ -9,7 +9,7 @@ export const CityCard = ({
   //if its the current city the city card will be #1A4F5C
   return (
     <div
-      className={`flex flex-col justify-center items-center rounded-3xl p-5 cursor-pointer w-full border ${
+      className={`flex flex-col justify-center items-center rounded-3xl p-3 cursor-pointer w-full border min-w-[33%} ${
         selectedCity === city
           ? "border-[#FFE8A3]"
           : "bg-[#D86B6B] hover:bg-[#1A4F5C]"

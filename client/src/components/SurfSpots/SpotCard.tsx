@@ -8,7 +8,7 @@ export const SpotCard = ({
   deleteSurfSpot: (id: number) => void;
 }) => {
   return (
-    <div className="flex flex-col rounded-3xl border border-[#FFE8A3] p-3 w-full ">
+    <div className="flex flex-col rounded-3xl border border-[#FFE8A3] p-3 w-full min-w-[33%]">
       <div className="flex justify-end">
         <svg
           xmlns="http://www.w3.org/2000/svg"
