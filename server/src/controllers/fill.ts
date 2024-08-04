@@ -146,6 +146,7 @@ const fill = async (
       city: "Huntington Beach",
       spotName: "North Side",
       rating: 3,
+      diary: "Great day!",
     });
     console.log("session filled");
     //await SurfSpot.bulkCreate(spots);

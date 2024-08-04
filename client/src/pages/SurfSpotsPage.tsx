@@ -63,9 +63,9 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
           city={selectedCity}
         />
       </div>
-      <div className="flex gap-[2vw] mt-4">
-        <div className="flex flex-col overflow-auto">
-          <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3]">
+      <div className="justify-center max-h-[90%] flex gap-[2vw] mt-4">
+        <div className="flex flex-col overflow-auto w-11/12">
+          <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3] w-full">
             Cities
           </h3>
           <div className="grid grid-cols-3 gap-[.5vw] overflow-auto mt-2">
@@ -84,8 +84,8 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col overflow-auto">
-          <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3]">
+        <div className="flex flex-col overflow-auto w-11/12">
+          <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3] w-full">
             Surf Spots
           </h3>
           <div className="grid grid-cols-3 gap-[.5vw]  overflow-auto mt-2">

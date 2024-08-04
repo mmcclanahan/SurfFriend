@@ -34,6 +34,7 @@ export const createSession = async (req: Request, res: Response) => {
       city: session.city,
       spotName: session.spotName,
       rating: session.rating,
+      diary: session.diary,
       //conditions: session.conditions,
     });
     res.status(200).send(newSession);

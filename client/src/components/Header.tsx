@@ -10,7 +10,10 @@ export const Header = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
   const { surfSpotsQuery } = useSurfSpots(1);
-  const [selected, setSelected] = useState(2);
+  const [selected, setSelected] = useState<number>(() => {
+    // Retrieve the selected state from local storage or default to 2 (Surf Spots)
+    return parseInt(localStorage.getItem("selectedPage") || "2", 10);
+  });
 
   const indexToPath = {
     1: "/status",
@@ -27,6 +30,7 @@ export const Header = () => {
     }
     navigate(indexToPath[num]);
     setSelected(num);
+    localStorage.setItem("selectedPage", num.toString());
   };
 
   return (

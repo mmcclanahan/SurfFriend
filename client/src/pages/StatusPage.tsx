@@ -7,6 +7,8 @@ import { useUserStatus } from "../hooks/useUserStatus";
 import { useSurfSpots } from "../hooks/useSurfSpots";
 import { useNotification } from "../hooks/NotificationContext";
 import { createCityAndSpotNamesObj } from "../utils/spotFormFns";
+import { DiaryEntryForm } from "../components/DiaryEntryForm";
+import { Modal } from "../components/Modal";
 
 export const StatusPage = ({ userId }: { userId: number }) => {
   const navigate = useNavigate();
@@ -14,15 +16,33 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   const [city, setCity] = useState("");
   const [spotName, setSpotName] = useState("");
   const [rating, setRating] = useState(3);
+
+  const [diary, setDiary] = useState("");
   const { surfSpotsQuery } = useSurfSpots(userId);
   const { statusQuery, updateStatusMutation } = useUserStatus(userId);
+  //notification state
   const { showNotification } = useNotification();
+  //modal state
+  const [showModal, setShowModal] = useState(false);
+  const showDiaryModal = () => setShowModal(true);
+  const closeDiaryModal = () => setShowModal(false);
 
   const surfSpots = surfSpotsQuery.data || [];
 
   const cityAndSpotNames = useMemo(() => {
     return createCityAndSpotNamesObj(surfSpots);
   }, [surfSpots]);
+
+  const addSession = () => {
+    const session: Session = {
+      city,
+      spotName,
+      rating,
+      diary,
+    };
+    createSession(userId, session);
+    //add navigate and notification
+  };
 
   useEffect(() => {
     if (statusQuery.data && surfSpotsQuery.data) {
@@ -52,15 +72,11 @@ export const StatusPage = ({ userId }: { userId: number }) => {
     };
     updateStatusMutation.mutate(statusForm);
     if (status === 4) {
-      const session: Session = {
-        city,
-        spotName,
-        rating,
-      };
-      createSession(userId, session);
+      showDiaryModal();
+    } else {
+      navigate("/");
+      showNotification("Status Updated", 1);
     }
-    navigate("/");
-    showNotification("Status Updated", 1);
   };
 
   const handleStatusChange = (status: number) => {
@@ -70,35 +86,47 @@ export const StatusPage = ({ userId }: { userId: number }) => {
     }
   };
 
+  const selectStyle =
+    "block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
+
   if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
   return (
-    <div className="flex flex-col justify-between bg-myGray rounded shadow-white shadow-md p-5 mt-20 h-full w-full max-w-xl max-h-xl">
-      <form className="statusForm" onSubmit={handleSubmit}>
-        <h1 className="text-5xl">Update Status</h1>
-        <div className="flex flex-col">
-          <label htmlFor="status" className="text-xl">
+    <div className="flex bg-black justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+      <Modal show={showModal} onClose={closeDiaryModal}>
+        <DiaryEntryForm
+          setDiary={setDiary}
+          closeDiaryModal={closeDiaryModal}
+          addSession={addSession}
+        />
+      </Modal>
+      <form className="flex flex-col" onSubmit={handleSubmit}>
+        <h1 className="text-5xl text-[#FFE8A3]">Update Status for Friends</h1>
+        <div className="mt-4">
+          <label htmlFor="status" className="text-xl text-[#FFE8A3]">
             Status
           </label>
           <select
             id="status"
+            className={selectStyle}
             value={status}
             onChange={(e) => {
               handleStatusChange(Number(e.target.value));
             }}
           >
             <option value={1}>Not Surfing</option>
-            <option value={2}>Checking the spot</option>
-            <option value={3}>Jumping in water</option>
+            <option value={2}>Checking</option>
+            <option value={3}>Paddling out</option>
             <option value={4}>Done Surfing</option>
           </select>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="city" className="text-xl">
+        <div className="mt-4">
+          <label htmlFor="city" className="text-xl text-[#FFE8A3]">
             City
           </label>
           <select
             id="city"
+            className={selectStyle}
             value={city}
             onChange={(e) => {
               setCity(e.target.value);
@@ -113,11 +141,12 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             ))}
           </select>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="spotName" className="text-xl">
+        <div className="mt-4">
+          <label htmlFor="spotName" className="mt-2 text-xl text-[#FFE8A3]">
             Spot Name
           </label>
           <select
+            className={selectStyle}
             id="spotName"
             value={spotName}
             onChange={(e) => setSpotName(e.target.value)}
@@ -130,8 +159,8 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             ))}
           </select>
         </div>
-        <div className="formDivs">
-          <label htmlFor="rating" className="text-xl">
+        <div className="mt-4">
+          <label htmlFor="rating" className="mt-2 text-xl text-[#FFE8A3]">
             Rating
           </label>
           <div className="flex gap-20">
@@ -155,10 +184,10 @@ export const StatusPage = ({ userId }: { userId: number }) => {
           </div>
         </div>
         <button
-          className="border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
+          className="mt-4 border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
           type="submit"
         >
-          Submit
+          Update Status
         </button>
       </form>
     </div>

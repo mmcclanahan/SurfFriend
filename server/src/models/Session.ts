@@ -33,6 +33,10 @@ Session.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    diary: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     conditions: {
       type: DataTypes.STRING,
       allowNull: true,

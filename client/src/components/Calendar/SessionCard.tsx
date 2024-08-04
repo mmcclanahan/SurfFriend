@@ -24,7 +24,12 @@ export const SessionCard = ({ session }: { session: Session }) => {
         <p>Spot Name: {session.spotName}</p>
         <p>City: {session.city}</p>
         <p>Rating: {session.rating}</p>
-        {showConditions && <SessionCondition conditions={session.conditions} />}
+        {showConditions && (
+          <SessionCondition
+            conditions={session.conditions}
+            diary={session.diary}
+          />
+        )}
       </div>
       <Modal show={confirm} onClose={() => setConfirm(false)}>
         <Confirm

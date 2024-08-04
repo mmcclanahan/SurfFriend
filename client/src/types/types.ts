@@ -23,8 +23,8 @@ export interface Session {
   city: string;
   spotName: string;
   rating: number;
+  diary?: string;
   conditions?: string;
-  createdAt: string;
 }
 
 export interface SurfSpot {
@@ -55,6 +55,7 @@ export interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
 }
+
 export interface CityCardProps {
   city: string;
   spots: number;
