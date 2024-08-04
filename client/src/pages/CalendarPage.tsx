@@ -38,10 +38,10 @@ export const CalendarPage = ({ userId }: { userId: number }) => {
   };
 
   return (
-    <div className="bg-white flex mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+    <div className="b flex mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateCalendar
-          className="border border-red-600 "
+          className="border border-red-600"
           value={value}
           onChange={handleDayClick}
           onMonthChange={() => {}}

@@ -1,16 +1,13 @@
 export const SessionCondition = ({
   conditions,
-  diary,
 }: {
   conditions: string;
   diary: string;
 }) => {
   return (
     <div>
-      <h1>SessionCondition</h1>
-      <p>session conditions listed here</p>
-      <h3>Diary Entry</h3>
-      <p>{diary}</p>
+      <h3 className="text-sm mt-2 text-[#FFCD29]">Conditions</h3>
+      <p className="p-1 text-[#FFE8A3]">{conditions}</p>
     </div>
   );
 };
