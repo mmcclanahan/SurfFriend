@@ -3,23 +3,26 @@ import { Loading } from "../components/Loading";
 import { StatusForm, Session } from "../types/types";
 import { createSession } from "../API/sessions";
 import { useNavigate } from "react-router-dom";
-import { useUserStatus } from "../hooks/useUserStatus";
-import { useSurfSpots } from "../hooks/useSurfSpots";
 import { useNotification } from "../hooks/NotificationContext";
 import { createCityAndSpotNamesObj } from "../utils/spotFormFns";
 import { DiaryEntryForm } from "../components/DiaryEntryForm";
 import { Modal } from "../components/Modal";
+import { SurfSpot } from "../types/types";
+import { getStatus, updateStatus } from "../Supa/queries/statusQuery";
+import { getSpots } from "../Supa/queries/surfSpotsQuery";
 
 export const StatusPage = ({ userId }: { userId: number }) => {
   const navigate = useNavigate();
+
+  const [statusId, setStatusId] = useState(null);
   const [status, setStatus] = useState(1);
   const [city, setCity] = useState("");
   const [spotName, setSpotName] = useState("");
   const [rating, setRating] = useState(3);
-
-  const [diary, setDiary] = useState("");
-  const { surfSpotsQuery } = useSurfSpots(userId);
-  const { statusQuery, updateStatusMutation } = useUserStatus(userId);
+  //query state
+  const [surfSpots, setSurfSpots] = useState<SurfSpot[]>([]);
+  const [spotId, setSpotId] = useState(0);
+  const [cityAndSpotNames, setCityAndSpotNames] = useState({});
   //notification state
   const { showNotification } = useNotification();
   //modal state
@@ -27,58 +30,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   const showDiaryModal = () => setShowModal(true);
   const closeDiaryModal = () => setShowModal(false);
 
-  const surfSpots = surfSpotsQuery.data || [];
-
-  const cityAndSpotNames = useMemo(() => {
-    return createCityAndSpotNamesObj(surfSpots);
-  }, [surfSpots]);
-
-  const addSession = () => {
-    const session: Session = {
-      city,
-      spotName,
-      rating,
-      diary,
-    };
-    createSession(userId, session);
-    //add navigate and notification
-  };
-
-  useEffect(() => {
-    if (statusQuery.data && surfSpotsQuery.data) {
-      const defaultCity =
-        surfSpotsQuery.data.length > 0 ? surfSpotsQuery.data[0].city : "";
-      const defaultSpotName =
-        surfSpotsQuery.data.length > 0 ? surfSpotsQuery.data[0].spotName : "";
-      if (statusQuery.data.city === "") {
-        setCity(defaultCity);
-        setSpotName(defaultSpotName);
-      } else {
-        setStatus(statusQuery.data.status);
-        setCity(statusQuery.data.city);
-        setSpotName(statusQuery.data.spotName);
-        setRating(statusQuery.data.rating);
-      }
-    }
-  }, [statusQuery.data, surfSpotsQuery.data]);
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const statusForm: StatusForm = {
-      status,
-      city,
-      spotName,
-      rating,
-    };
-    updateStatusMutation.mutate(statusForm);
-    if (status === 4) {
-      showDiaryModal();
-    } else {
-      navigate("/");
-      showNotification("Status Updated", 1);
-    }
-  };
-
+  //status mutation
   const handleStatusChange = (status: number) => {
     setStatus(status);
     if (status < 4 && rating !== 0) {
@@ -86,22 +38,89 @@ export const StatusPage = ({ userId }: { userId: number }) => {
     }
   };
 
+  //status
+  const getUserStatus = async (spotStatePreLoad) => {
+    const { data, error } = await getStatus();
+    if (error) {
+      console.log("Error fetching user status:", error.message);
+      return;
+    }
+    if (data[0].city === null) {
+      setCity(spotStatePreLoad[0].city);
+      setSpotName(spotStatePreLoad[0].spot_name);
+      setSpotId(spotStatePreLoad[0].id);
+    } else {
+      setCity(data[0].city);
+      setSpotName(data[0].spot_name);
+      const spot = spotStatePreLoad.find(
+        (spot) => spot.spot_name === data[0].spot_name
+      );
+      setSpotId(spot.id);
+    }
+    setStatusId(data[0].id);
+    setStatus(data[0].status);
+    setRating(data[0].rating);
+  };
+  //sessions
+
+  //surf spots
+  const getSurfSpots = async () => {
+    const { data, error } = await getSpots();
+    if (error) {
+      console.log("Error fetching surf spots:", error.message);
+      return;
+    }
+    setSurfSpots(data);
+    return data;
+  };
+  //fetch
+  const fetchData = async () => {
+    await getSurfSpots().then((data) => {
+      getUserStatus(data);
+      const cityAndSpotNames = createCityAndSpotNamesObj(data);
+      setCityAndSpotNames(cityAndSpotNames);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const statusForm: StatusForm = {
+      status,
+      city,
+      spot_name: spotName,
+      rating,
+      statusId,
+    };
+    updateStatus(statusForm);
+    if (status === 4) {
+      showDiaryModal();
+    } else {
+      //navigate("/");
+      showNotification("Status Updated", 1);
+    }
+  };
+
   const selectStyle =
     "block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
 
-  if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
+  //if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
   return (
     <div className="flex bg-black justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <Modal show={showModal} onClose={closeDiaryModal}>
         <DiaryEntryForm
-          setDiary={setDiary}
+          city={city}
+          spotName={spotName}
+          rating={rating}
           closeDiaryModal={closeDiaryModal}
-          addSession={addSession}
         />
       </Modal>
       <form className="flex flex-col" onSubmit={handleSubmit}>
-        <h1 className="text-5xl text-[#FFE8A3]">Update Status for Friends</h1>
+        <h1 className="text-5xl text-[#FFE8A3]">Update Status</h1>
         <div className="mt-4">
           <label htmlFor="status" className="text-xl text-[#FFE8A3]">
             Status
@@ -130,7 +149,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             value={city}
             onChange={(e) => {
               setCity(e.target.value);
-              setSpotName(cityAndSpotNames[e.target.value][0]);
+              setSpotName(cityAndSpotNames[e.target.value][0].spot_name);
             }}
             disabled={status === 1}
           >
@@ -149,12 +168,16 @@ export const StatusPage = ({ userId }: { userId: number }) => {
             className={selectStyle}
             id="spotName"
             value={spotName}
-            onChange={(e) => setSpotName(e.target.value)}
+            onChange={(e) => {
+              e.preventDefault();
+              setSpotName(e.target.value);
+              setSpotId(Number(e.target.selectedOptions[0].id));
+            }}
             disabled={status === 1}
           >
             {cityAndSpotNames[city]?.map((spot) => (
-              <option key={spot} value={spot}>
-                {spot}
+              <option key={spot.id} value={spot.spot_name} id={spot.id}>
+                {spot.spot_name}
               </option>
             ))}
           </select>
@@ -168,6 +191,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
               <button
                 key={value}
                 type="button"
+                id="rating"
                 className={`w-10 h-10 flex items-center justify-center border rounded-md ${
                   rating === value
                     ? "bg-myGreen text-myBlack"

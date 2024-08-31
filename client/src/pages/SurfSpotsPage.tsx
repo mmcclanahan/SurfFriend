@@ -1,28 +1,43 @@
 import { useEffect, useState } from "react";
+import { SurfSpot } from "../types/types";
 import { SpotCard } from "../components/SurfSpots/SpotCard";
 import { CityCard } from "../components/SurfSpots/CityCard";
 import { EmptySpotCard } from "../components/SurfSpots/EmptySpotCard";
-import { useSurfSpots } from "../hooks/useSurfSpots";
-import { SurfSpot } from "../types/types";
 import { Loading } from "../components/Loading";
 import { AddSpotForm } from "../components/SurfSpots/AddSpotForm";
+import { getSpots, deleteSpot, addSpot } from "../Supa/queries/surfSpotsQuery";
 
 export const SurfSpotsPage = ({ userId }: { userId: number }) => {
-  const { surfSpotsQuery, createSurfSpotMutation, handleDeleteSurfSpot } =
-    useSurfSpots(userId);
+  const [surfSpots, setSurfSpots] = useState<SurfSpot[]>([]);
   const [selectedCity, setSelectedCity] = useState("Other");
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (surfSpotsQuery.data && surfSpotsQuery.data.length > 0) {
-      setSelectedCity(surfSpotsQuery.data[0].city);
-    } else {
-      setSelectedCity("Other");
-    }
-  }, [surfSpotsQuery.data]);
+    //move
+    const fetchSpots = async () => {
+      setLoading(true);
+      const { data, error } = await getSpots();
 
-  if (surfSpotsQuery.isLoading) return <Loading />;
+      if (error) {
+        console.log("Error fetching surf spots:", error.message);
+        setLoading(false);
+        return;
+      }
+      setSurfSpots(data);
+      setLoading(false);
 
-  const surfSpots = surfSpotsQuery.data || [];
+      if (data.length > 0) {
+        setSelectedCity(data[0].city);
+      } else {
+        setSelectedCity("Other");
+      }
+    };
+
+    fetchSpots();
+  }, []);
+
+  if (loading) return <Loading />;
 
   const cities = surfSpots.reduce(
     (acc: { [key: string]: number }, spot: SurfSpot) => {
@@ -45,8 +60,20 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
     setSelectedCity(city);
   };
 
-  const deleteSurfSpot = (id: number) => {
-    handleDeleteSurfSpot(id);
+  const deleteSurfSpot = async (id: number) => {
+    const { error } = await deleteSpot(id);
+    if (error) {
+      console.log("Error deleting surf spot:", error);
+      return;
+    }
+
+    const { data: newSpots, error: newError } = await getSpots();
+    if (newError) {
+      console.log("Error fetching surf spots:", newError.message);
+      return;
+    }
+    setSurfSpots(newSpots);
+
     if (spots.length === 1) {
       setSelectedCity("Other");
     }
@@ -56,11 +83,11 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
     <div className="flex flex-col mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <div className="">
         <AddSpotForm
-          createSpot={createSurfSpotMutation.mutateAsync}
           userId={userId}
           cities={Object.keys(cities)}
           surfSpots={surfSpots}
           city={selectedCity}
+          addSpot={addSpot}
         />
       </div>
       <div className="justify-center max-h-[90%] flex gap-[2vw] mt-4">
@@ -95,8 +122,8 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
               spots.map((spot: SurfSpot) => (
                 <SpotCard
                   key={spot.id}
-                  deleteSurfSpot={deleteSurfSpot}
                   spot={spot}
+                  deleteSurfSpot={deleteSurfSpot}
                 />
               ))
             )}

@@ -1,27 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loading } from "../Loading";
 import { FriendCard } from "./FriendCard";
 import { Friend } from "../../types/types";
-import { useFriends } from "../../hooks/useFriends";
 import { useNotification } from "../../hooks/NotificationContext";
 import "../../styles/friendSideBar.css";
+import {
+  getAllFriends,
+  createFriendRequest,
+  acceptFriendRequest,
+  deleteFriend,
+} from "../../Supa/queries/friendQuery";
 
-export const FriendsList = ({ userId }: { userId: number }) => {
-  const { friendsQuery, createFriendRequestMutation } = useFriends(userId);
+export const FriendsList = ({ userId }: { userId: string }) => {
   const { showNotification } = useNotification();
   const [friendUsername, setFriendUsername] = useState("");
+  const [allFriends, setAllFriends] = useState<Friend[]>([]);
 
-  if (friendsQuery.isLoading) return <Loading />;
-  if (friendsQuery.isError) return <div>Error</div>;
-  //do try catch block instead?
+  const fetchFriends = async () => {
+    const { data, error } = await getAllFriends();
+    if (error) {
+      showNotification("Error getting friends", 0);
+      return;
+    }
+    setAllFriends(data);
+  };
+
+  useEffect(() => {
+    fetchFriends();
+  }, []);
 
   const addFriend = async () => {
-    try {
-      await createFriendRequestMutation.mutateAsync(friendUsername);
-      showNotification("Friend request sent", 1);
-    } catch (error) {
+    const response = await createFriendRequest(friendUsername);
+    if (response.error) {
       showNotification("User not found", 0);
+      return;
     }
+    showNotification("Friend request sent", 1);
+    fetchFriends();
+  };
+
+  const deleteFriendAndReload = async (friendId: string) => {
+    const response = await deleteFriend(friendId);
+    if (response.error) {
+      showNotification("Error deleting friend", 0);
+      return;
+    }
+    fetchFriends();
   };
 
   return (
@@ -33,8 +57,9 @@ export const FriendsList = ({ userId }: { userId: number }) => {
         <div className="flex items-center gap-1 ">
           <input
             className="rounded-md p-1 w-40"
+            name="friendUsername"
             type="text"
-            placeholder="UserName"
+            placeholder="User Name"
             onChange={(e) => {
               setFriendUsername(e.target.value);
             }}
@@ -46,17 +71,22 @@ export const FriendsList = ({ userId }: { userId: number }) => {
             I
           </button>
         </div>
-        {friendsQuery.data?.length === 0 ? (
+        {allFriends.length === 0 ? (
           <div className="items-center content-center">No Friends</div>
         ) : (
           <ul>
-            {friendsQuery.data?.map((friend: Friend) => (
-              <FriendCard
-                key={friend.friendId}
-                userId={userId}
-                friend={friend}
-              />
-            ))}
+            {allFriends.map((friend: Friend) => {
+              return (
+                <FriendCard
+                  key={friend.friend_id}
+                  userId={userId}
+                  friend={friend}
+                  fetchFriends={fetchFriends}
+                  acceptFriendRequest={acceptFriendRequest}
+                  deleteFriendAndReload={deleteFriendAndReload}
+                />
+              );
+            })}
           </ul>
         )}
       </div>
