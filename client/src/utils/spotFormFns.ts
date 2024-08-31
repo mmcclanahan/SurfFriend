@@ -23,14 +23,14 @@ export const checkMatchingText = (originalString: string, list: string[]) => {
   }
   return originalString;
 };
-
+//push in the ids too not just spotName
 export const createCityAndSpotNamesObj = (surfSpots: SurfSpot[]) => {
-  const returnObj: { [key: string]: string[] } = {};
+  const returnObj: { [key: string]: SurfSpot[] } = {};
   surfSpots.forEach((spot) => {
     if (returnObj[spot.city]) {
-      returnObj[spot.city].push(spot.spotName);
+      returnObj[spot.city].push(spot);
     } else {
-      returnObj[spot.city] = [spot.spotName];
+      returnObj[spot.city] = [spot];
     }
   });
   return returnObj;
