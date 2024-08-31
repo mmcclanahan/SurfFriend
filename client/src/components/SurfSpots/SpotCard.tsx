@@ -25,8 +25,8 @@ export const SpotCard = ({
         </svg>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <h4 className="font-semibold text-[#FFE8A3]">{spot.spotName}</h4>
-        <p className="text-[#FFE8A3]">Times Surfed: {spot.timesSurfed}</p>
+        <h4 className="font-semibold text-[#FFE8A3]">{spot.spot_name}</h4>
+        <p className="text-[#FFE8A3]">Times Surfed: {spot.times_surfed}</p>
       </div>
     </div>
   );

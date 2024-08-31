@@ -6,7 +6,7 @@ import { doesNameExist, checkMatchingText } from "../../utils/spotFormFns";
 import { Modal } from "../Modal";
 
 export const AddSpotForm = ({
-  createSpot,
+  addSpot,
   userId,
   city,
   cities,
@@ -49,22 +49,22 @@ export const AddSpotForm = ({
         .map((spot) => spot.spotName)
     );
     const surfSpot: SurfSpot = {
-      userId,
       spotName: checkedName,
       city: city,
     };
-
-    try {
-      await createSpot(surfSpot);
-      showNotification("Spot added successfully!", 1);
-    } catch (error) {
+    console.log(surfSpot);
+    const { data, error } = await addSpot(surfSpot);
+    if (error) {
       showNotification(
         error.message || "City doesn't exist! Is there another name?",
         0
       );
+    } else {
+      showNotification("Spot added successfully!", 1);
     }
     setShowModal(false);
   };
+
   const handleSelectEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(event.target.value);
     setNewCity("");

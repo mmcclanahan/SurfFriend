@@ -4,14 +4,14 @@ import { useSurfSpots } from "../hooks/useSurfSpots";
 import { useNotification } from "../hooks/NotificationContext";
 import { HeaderButton } from "./HeaderButton";
 import SurfFriendPageLogo from "../assets/SurfFriendPageLogo.png";
+import { supabase } from "../Supa/connect";
+import { getSpots } from "../Supa/queries/surfSpotsQuery";
 import "../index.css";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
-  const { surfSpotsQuery } = useSurfSpots(1);
   const [selected, setSelected] = useState<number>(() => {
-    // Retrieve the selected state from local storage or default to 2 (Surf Spots)
     return parseInt(localStorage.getItem("selectedPage") || "2", 10);
   });
 
@@ -20,10 +20,11 @@ export const Header = () => {
     2: "/",
     3: "/calendar",
   };
-
-  const clickButton = (num: number) => {
+  //change so that getSpots isnt called just the surfspotsquerry is checked so theres no call
+  const clickButton = async (num: number) => {
     if (num === 1) {
-      if (surfSpotsQuery.data.length === 0) {
+      const { error, data } = await getSpots();
+      if (data?.length === 0 || error) {
         showNotification("Make a Surf Spot first!", 0);
         return;
       }
@@ -31,6 +32,15 @@ export const Header = () => {
     navigate(indexToPath[num]);
     setSelected(num);
     localStorage.setItem("selectedPage", num.toString());
+  };
+
+  const logOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error logging out:", error.message);
+      return;
+    }
+    navigate("/");
   };
 
   return (
@@ -60,6 +70,7 @@ export const Header = () => {
           index={3}
           text={"Calender"}
         />
+        <button onClick={logOut}>LOGOUT</button>
       </div>
     </div>
   );

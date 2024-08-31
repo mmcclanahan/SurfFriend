@@ -1,42 +1,42 @@
 export interface Friend {
-  userId: number;
-  friendId: number;
+  user_id: string;
+  friend_id: string;
   request: string;
   createdAt: string;
-  updatedAt: string;
-  username: string;
+  display_name: string;
   status: number;
   city: string | null;
-  spotName: string | null;
+  spot_name: string | null;
   rating: number | null;
 }
 
 export interface StatusForm {
+  id: number;
   status: number;
   city?: string;
-  spotName?: string;
+  spot_name?: string;
   rating: number;
+  statusId: number;
 }
 
 export interface Session {
-  userId?: number;
+  user_id: number;
   city: string;
-  spotName: string;
+  spot_name: string;
   rating: number;
   diary?: string;
-  conditions?: string;
+  //conditions?: string;
 }
 
 export interface SurfSpot {
   id: number;
-  userId: number;
   city: string;
-  spotName: string;
-  timesSurfed?: number;
+  spot_name: string;
+  times_surfed: number;
 }
 
 export interface AddSpotFormProps {
-  createSpot: (surfSpot: SurfSpot) => void;
+  addSpot: (surfSpot: SurfSpot) => { error: string } | { data: SurfSpot };
   userId: number;
   city: string;
   cities: string[];
