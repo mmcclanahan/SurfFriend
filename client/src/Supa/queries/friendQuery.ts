@@ -1,12 +1,6 @@
 import { supabase } from "../connect.js";
 
-export const getAllFriends = async () => {
-  //get user id
-  const { data, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return { data: null, error: "Error getting your user data" };
-  }
-  const userId = data.user.id;
+export const getAllFriends = async (userId: string) => {
   //get friends and the UserStatus for each user
   const response = await supabase.rpc("get_friends_status", {
     p_user_id: `${userId}`,
@@ -23,13 +17,10 @@ export const getFriend = async (friendUsername: string) => {
   return response;
 };
 
-export const createFriendRequest = async (friendUsername: string) => {
-  //get user id
-  const { data, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return { data: null, error: "Error getting your user data" };
-  }
-  const userId = data.user.id;
+export const createFriendRequest = async (
+  friendUsername: string,
+  userId: string
+) => {
   //get friend id from username
   const { data: friendData, error: friendError } = await getFriend(
     friendUsername
@@ -46,14 +37,7 @@ export const createFriendRequest = async (friendUsername: string) => {
   return response;
 };
 
-export const acceptFriendRequest = async (friendId: string) => {
-  // get the current user
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return { data: null, error: "Error getting your user data" };
-  }
-  const userId = userData.user.id;
-
+export const acceptFriendRequest = async (friendId: string, userId: string) => {
   //user side
   const { data: userResponse, error: userUpdateError } = await supabase
     .from("Friends")
@@ -76,15 +60,7 @@ export const acceptFriendRequest = async (friendId: string) => {
   return { data: { userResponse, friendResponse }, error: null };
 };
 
-export const deleteFriend = async (friendId: string) => {
-  // get the current user
-  console.log(friendId);
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return { data: null, error: "Error getting your user data" };
-  }
-  const userId = userData.user.id;
-  console.log(userId);
+export const deleteFriend = async (friendId: string, userId: string) => {
   //user side
   const { data: userResponse, error: userUpdateError } = await supabase
     .from("Friends")

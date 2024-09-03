@@ -1,25 +1,27 @@
 import { useState } from "react";
 import { supabase } from "../../Supa/connect";
+import { useNotification } from "../../hooks/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import { signIn } from "../../Supa/queries/userQuery";
 
-export const SignIn = ({ setExistingUser }) => {
+export const SignIn = ({
+  setExistingUser,
+}: {
+  setExistingUser: (value: boolean) => void;
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
-
-  const handleLogin = async (event) => {
+  //local storage deletes when browser is closed
+  //session storage deletes when tab is closed
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("clicked login");
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
+    const { data, error } = await signIn(email, password);
     if (error) {
-      console.error("Error logging in:", error.message);
+      showNotification(error.message, 0);
       return;
     }
-    console.log("User logged in:", data.user.id);
-    console.log("error variable:", error);
     navigate("/spots");
   };
 

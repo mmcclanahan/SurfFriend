@@ -13,8 +13,8 @@ export const FriendCard = ({
   userId: string;
   friend: Friend;
   fetchFriends: () => void;
-  acceptFriendRequest: (friendId: string) => void;
-  deleteFriendAndReload: (friendId: string) => void;
+  acceptFriendRequest: (friendId: string, userId: string) => void;
+  deleteFriendAndReload: (friendId: string, userId: string) => void;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const showConfirmDeleteModal = () => setShowModal(true);
@@ -43,7 +43,7 @@ export const FriendCard = ({
             header={`Are you sure you want to delete ${friend.display_name} from your friends list?`}
             backFn={closeConfirmDeleteModal}
             confirmFn={async () => {
-              deleteFriendAndReload(friend.friend_id);
+              deleteFriendAndReload(friend.friend_id, userId);
               closeConfirmDeleteModal();
             }}
             info={[]}
@@ -57,7 +57,7 @@ export const FriendCard = ({
         {friend.request === "received" && (
           <button
             onClick={() => {
-              acceptFriendRequest(friend.friend_id);
+              acceptFriendRequest(friend.friend_id, userId);
             }}
           >
             Accept Friend Request

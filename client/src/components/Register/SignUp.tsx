@@ -1,28 +1,39 @@
 import { useState } from "react";
 import { supabase } from "../../Supa/connect";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../hooks/NotificationContext";
+import { createUser } from "../../Supa/queries/userQuery";
+import { createStatus } from "../../Supa/queries/statusQuery";
 
-export const SignUp = ({ setExistingUser }) => {
+export const SignUp = ({
+  setExistingUser,
+}: {
+  setExistingUser: (value: boolean) => void;
+}) => {
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   //need to tell user they must verify email before logging in
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      displayName: displayName,
-      password: password,
-    });
+  const handleSignUp = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const { data, error } = await createUser(email, password);
     if (error) {
-      console.error("Error Signing up:", error.message);
+      if (error.message === "Email rate limit exceeded") {
+        showNotification("We've had too many sign ups! Please wait an hour", 0);
+      } else {
+        showNotification(error.message, 0);
+      }
       return;
     }
-    console.log("User signed up and in:", data);
-    //navigate("/");
-    //localStorage.setItem("isAuthenticated", "true");
+    showNotification("Check your email to verify your account", 1);
+    const { data: statusData, error: statusError } = await createStatus(
+      data.user.id,
+      displayName
+    );
+    navigate("/spots");
   };
   return (
     <div>

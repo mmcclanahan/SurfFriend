@@ -10,14 +10,16 @@ import {
   acceptFriendRequest,
   deleteFriend,
 } from "../../Supa/queries/friendQuery";
+import { useUser } from "../../hooks/UserContext";
 
-export const FriendsList = ({ userId }: { userId: string }) => {
+export const FriendsList = () => {
   const { showNotification } = useNotification();
+  const { userId } = useUser();
   const [friendUsername, setFriendUsername] = useState("");
   const [allFriends, setAllFriends] = useState<Friend[]>([]);
 
   const fetchFriends = async () => {
-    const { data, error } = await getAllFriends();
+    const { data, error } = await getAllFriends(userId);
     if (error) {
       showNotification("Error getting friends", 0);
       return;
@@ -30,7 +32,7 @@ export const FriendsList = ({ userId }: { userId: string }) => {
   }, []);
 
   const addFriend = async () => {
-    const response = await createFriendRequest(friendUsername);
+    const response = await createFriendRequest(friendUsername, userId);
     if (response.error) {
       showNotification("User not found", 0);
       return;
@@ -40,7 +42,7 @@ export const FriendsList = ({ userId }: { userId: string }) => {
   };
 
   const deleteFriendAndReload = async (friendId: string) => {
-    const response = await deleteFriend(friendId);
+    const response = await deleteFriend(friendId, userId);
     if (response.error) {
       showNotification("Error deleting friend", 0);
       return;

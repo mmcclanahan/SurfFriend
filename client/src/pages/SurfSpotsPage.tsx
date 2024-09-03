@@ -5,12 +5,13 @@ import { CityCard } from "../components/SurfSpots/CityCard";
 import { EmptySpotCard } from "../components/SurfSpots/EmptySpotCard";
 import { Loading } from "../components/Loading";
 import { AddSpotForm } from "../components/SurfSpots/AddSpotForm";
-import { getSpots, deleteSpot, addSpot } from "../Supa/queries/surfSpotsQuery";
+import { getSpots, deleteSpot } from "../Supa/queries/surfSpotsQuery";
+import { useNotification } from "../hooks/NotificationContext";
 
-export const SurfSpotsPage = ({ userId }: { userId: number }) => {
+export const SurfSpotsPage = () => {
   const [surfSpots, setSurfSpots] = useState<SurfSpot[]>([]);
   const [selectedCity, setSelectedCity] = useState("Other");
-
+  const { showNotification } = useNotification();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,17 +62,13 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
   };
 
   const deleteSurfSpot = async (id: number) => {
-    const { error } = await deleteSpot(id);
+    const { data, error } = await deleteSpot(id);
     if (error) {
-      console.log("Error deleting surf spot:", error);
+      showNotification("Error deleting surf spot", 0);
       return;
     }
-
-    const { data: newSpots, error: newError } = await getSpots();
-    if (newError) {
-      console.log("Error fetching surf spots:", newError.message);
-      return;
-    }
+    // re configure the state of the surf spots without the deleted spot
+    const newSpots = surfSpots.filter((spot) => spot.id !== id);
     setSurfSpots(newSpots);
 
     if (spots.length === 1) {
@@ -83,11 +80,9 @@ export const SurfSpotsPage = ({ userId }: { userId: number }) => {
     <div className="flex flex-col mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <div className="">
         <AddSpotForm
-          userId={userId}
           cities={Object.keys(cities)}
           surfSpots={surfSpots}
           city={selectedCity}
-          addSpot={addSpot}
         />
       </div>
       <div className="justify-center max-h-[90%] flex gap-[2vw] mt-4">

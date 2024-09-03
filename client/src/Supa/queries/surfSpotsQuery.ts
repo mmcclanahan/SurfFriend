@@ -7,29 +7,21 @@ export const getSpots = async () => {
 };
 
 export const addSpot = async (surfSpot: SurfSpot) => {
-  const { data, error } = await supabase
-    .from("SurfSpots")
-    .insert(surfSpot)
-    .select();
-
-  if (error) {
-    console.error("Error adding surf spot:", error.message);
-    return error;
-  }
-
-  return { data, error };
+  const response = await supabase.from("SurfSpots").insert(surfSpot).select();
+  return response;
 };
 
 export const deleteSpot = async (spotId: number) => {
   const response = await supabase.from("SurfSpots").delete().eq("id", spotId);
   return response;
 };
-
+//need times surfed
 export const incrementSpot = async (spotId: number, times_surfed: number) => {
+  console.log(spotId, times_surfed, "here");
+  const amt = times_surfed + 1;
   const response = await supabase
     .from("SurfSpots")
-    .update({ count: times_surfed + 1 })
+    .update({ times_surfed: amt })
     .eq("id", spotId);
-
   return response;
 };

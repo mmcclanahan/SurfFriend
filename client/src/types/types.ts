@@ -33,11 +33,10 @@ export interface SurfSpot {
   city: string;
   spot_name: string;
   times_surfed: number;
+  user_id: string;
 }
 
 export interface AddSpotFormProps {
-  addSpot: (surfSpot: SurfSpot) => { error: string } | { data: SurfSpot };
-  userId: number;
   city: string;
   cities: string[];
   surfSpots: SurfSpot[];

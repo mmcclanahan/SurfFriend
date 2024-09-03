@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Loading } from "../components/Loading";
 import { StatusForm, Session } from "../types/types";
-import { createSession } from "../API/sessions";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../hooks/NotificationContext";
 import { createCityAndSpotNamesObj } from "../utils/spotFormFns";
@@ -9,11 +8,12 @@ import { DiaryEntryForm } from "../components/DiaryEntryForm";
 import { Modal } from "../components/Modal";
 import { SurfSpot } from "../types/types";
 import { getStatus, updateStatus } from "../Supa/queries/statusQuery";
-import { getSpots } from "../Supa/queries/surfSpotsQuery";
+import { getSpots, incrementSpot } from "../Supa/queries/surfSpotsQuery";
+import { useUser } from "../hooks/UserContext";
 
-export const StatusPage = ({ userId }: { userId: number }) => {
+export const StatusPage = () => {
   const navigate = useNavigate();
-
+  const { userId } = useUser();
   const [statusId, setStatusId] = useState(null);
   const [status, setStatus] = useState(1);
   const [city, setCity] = useState("");
@@ -21,6 +21,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   const [rating, setRating] = useState(3);
   //query state
   const [surfSpots, setSurfSpots] = useState<SurfSpot[]>([]);
+  const [times_surfed, setTimesSurfed] = useState(0);
   const [spotId, setSpotId] = useState(0);
   const [cityAndSpotNames, setCityAndSpotNames] = useState({});
   //notification state
@@ -37,33 +38,41 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       setRating(0);
     }
   };
-
-  //status
+  //get status
   const getUserStatus = async (spotStatePreLoad) => {
-    const { data, error } = await getStatus();
+    const { data, error } = await getStatus(userId);
+
     if (error) {
-      console.log("Error fetching user status:", error.message);
+      showNotification("Error fetching status!", 0);
       return;
     }
     if (data[0].city === null) {
       setCity(spotStatePreLoad[0].city);
       setSpotName(spotStatePreLoad[0].spot_name);
       setSpotId(spotStatePreLoad[0].id);
+      setTimesSurfed(spotStatePreLoad[0].times_surfed);
     } else {
       setCity(data[0].city);
       setSpotName(data[0].spot_name);
       const spot = spotStatePreLoad.find(
         (spot) => spot.spot_name === data[0].spot_name
       );
-      setSpotId(spot.id);
+      if (!spot) {
+        setCity(spotStatePreLoad[0].city);
+        setSpotName(spotStatePreLoad[0].spot_name);
+        setSpotId(spotStatePreLoad[0].id);
+        setTimesSurfed(spotStatePreLoad[0].times_surfed);
+      } else {
+        setSpotId(spot.id);
+        setTimesSurfed(spot.times_surfed);
+      }
     }
     setStatusId(data[0].id);
     setStatus(data[0].status);
     setRating(data[0].rating);
   };
-  //sessions
 
-  //surf spots
+  //get surf spots
   const getSurfSpots = async () => {
     const { data, error } = await getSpots();
     if (error) {
@@ -73,7 +82,7 @@ export const StatusPage = ({ userId }: { userId: number }) => {
     setSurfSpots(data);
     return data;
   };
-  //fetch
+  //fetch needed info for page
   const fetchData = async () => {
     await getSurfSpots().then((data) => {
       getUserStatus(data);
@@ -94,9 +103,15 @@ export const StatusPage = ({ userId }: { userId: number }) => {
       spot_name: spotName,
       rating,
       statusId,
+      times_surfed,
     };
+    //error handle here
     updateStatus(statusForm);
     if (status === 4) {
+      const { data, error } = await incrementSpot(spotId, times_surfed);
+      if (error) {
+        console.log("Error incrementing spot");
+      }
       showDiaryModal();
     } else {
       //navigate("/");
@@ -110,13 +125,14 @@ export const StatusPage = ({ userId }: { userId: number }) => {
   //if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
   return (
-    <div className="flex bg-black justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+    <div className="flex justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <Modal show={showModal} onClose={closeDiaryModal}>
         <DiaryEntryForm
           city={city}
           spotName={spotName}
           rating={rating}
           closeDiaryModal={closeDiaryModal}
+          userId={userId}
         />
       </Modal>
       <form className="flex flex-col" onSubmit={handleSubmit}>

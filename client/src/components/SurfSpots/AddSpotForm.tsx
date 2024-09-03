@@ -4,25 +4,23 @@ import { useNotification } from "../../hooks/NotificationContext";
 import { AddSpotFormProps } from "../../types/types";
 import { doesNameExist, checkMatchingText } from "../../utils/spotFormFns";
 import { Modal } from "../Modal";
+import { addSpot } from "../../Supa/queries/surfSpotsQuery";
+import { useUser } from "../../hooks/UserContext";
 
-export const AddSpotForm = ({
-  addSpot,
-  userId,
-  city,
-  cities,
-  surfSpots,
-}: AddSpotFormProps) => {
+export const AddSpotForm = ({ city, cities, surfSpots }: AddSpotFormProps) => {
   const [selectedCity, setSelectedCity] = useState(city || "Other");
   const [newCity, setNewCity] = useState("");
   const [name, setName] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { showNotification } = useNotification();
+  const { userId } = useUser();
 
   useEffect(() => {
     setSelectedCity(city || "Other");
     setNewCity("");
   }, [city]);
 
+  //can I input two of the same city names?
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     let city = selectedCity;
@@ -36,7 +34,7 @@ export const AddSpotForm = ({
         name,
         surfSpots
           .filter((spot) => spot.city === city)
-          .map((spot) => spot.spotName)
+          .map((spot) => spot.spot_name)
       )
     ) {
       showNotification("Spot already exists", 0);
@@ -46,13 +44,13 @@ export const AddSpotForm = ({
       name,
       surfSpots
         .filter((spot) => spot.city === city)
-        .map((spot) => spot.spotName)
+        .map((spot) => spot.spot_name)
     );
     const surfSpot: SurfSpot = {
-      spotName: checkedName,
+      spot_name: checkedName,
       city: city,
+      user_id: userId,
     };
-    console.log(surfSpot);
     const { data, error } = await addSpot(surfSpot);
     if (error) {
       showNotification(
@@ -62,6 +60,7 @@ export const AddSpotForm = ({
     } else {
       showNotification("Spot added successfully!", 1);
     }
+    //re get spots
     setShowModal(false);
   };
 

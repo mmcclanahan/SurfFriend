@@ -7,11 +7,13 @@ export const DiaryEntryForm = ({
   city,
   spotName,
   rating,
+  userId,
 }: {
   closeDiaryModal: () => void;
   city: string;
   spotName: string;
   rating: number;
+  userId: string;
 }) => {
   const { showNotification } = useNotification();
   const [diary, setDiary] = useState("");
@@ -25,7 +27,7 @@ export const DiaryEntryForm = ({
       diary: diary,
     };
 
-    const { data, error } = await createSession(session);
+    const { data, error } = await createSession(session, userId);
     if (error) {
       showNotification("Error saving your session!", 0);
       return;

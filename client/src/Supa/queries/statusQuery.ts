@@ -1,13 +1,7 @@
 import { supabase } from "../connect.js";
 import { StatusForm } from "../../types/types.js";
 
-export const getStatus = async () => {
-  //get user
-  const { data, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return { data: null, error: "Error getting your user data" };
-  }
-  const userId = data.user.id;
+export const getStatus = async (userId) => {
   const response = await supabase
     .from("UserStatus")
     .select()
@@ -27,6 +21,13 @@ export const updateStatus = async (statusForm: StatusForm) => {
 export const createStatus = async (id: string, displayName: string) => {
   const response = await supabase
     .from("UserStatus")
-    .insert({ user_id: id, status: 1, display_name: displayName, rating: 3 });
+    .insert({
+      user_id: id,
+      status: 1,
+      display_name: displayName,
+      rating: 3,
+      spot_name: "",
+      city: "",
+    });
   return response;
 };
