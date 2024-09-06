@@ -21,7 +21,7 @@ export const PrivateRoute = () => {
   }, []);
 
   if (loggedIn === null) {
-    return <div>Loading...</div>;
+    return <div>Loading into page!...</div>;
   }
 
   return loggedIn ? <Outlet /> : <Navigate to="/" />;

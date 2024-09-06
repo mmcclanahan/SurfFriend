@@ -13,13 +13,12 @@ export const SignIn = ({
   const [password, setPassword] = useState("");
   const { showNotification } = useNotification();
   const navigate = useNavigate();
-  //local storage deletes when browser is closed
-  //session storage deletes when tab is closed
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     const { data, error } = await signIn(email, password);
     if (error) {
-      showNotification(error.message, 0);
+      showNotification(error.message, 0, 5000);
       return;
     }
     navigate("/spots");

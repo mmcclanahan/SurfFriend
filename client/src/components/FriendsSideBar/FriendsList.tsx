@@ -21,7 +21,7 @@ export const FriendsList = () => {
   const fetchFriends = async () => {
     const { data, error } = await getAllFriends(userId);
     if (error) {
-      showNotification("Error getting friends", 0);
+      showNotification("Error getting friends", 0, 2000);
       return;
     }
     setAllFriends(data);
@@ -34,17 +34,17 @@ export const FriendsList = () => {
   const addFriend = async () => {
     const response = await createFriendRequest(friendUsername, userId);
     if (response.error) {
-      showNotification("User not found", 0);
+      showNotification("User not found", 0, 2000);
       return;
     }
-    showNotification("Friend request sent", 1);
+    showNotification("Friend request sent", 1, 2000);
     fetchFriends();
   };
 
   const deleteFriendAndReload = async (friendId: string) => {
     const response = await deleteFriend(friendId, userId);
     if (response.error) {
-      showNotification("Error deleting friend", 0);
+      showNotification("Error deleting friend", 0, 2000);
       return;
     }
     fetchFriends();

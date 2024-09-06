@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
-import { Loading } from "../components/Loading";
+import { useState, useEffect } from "react";
 import { StatusForm, Session } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../hooks/NotificationContext";
@@ -43,7 +42,7 @@ export const StatusPage = () => {
     const { data, error } = await getStatus(userId);
 
     if (error) {
-      showNotification("Error fetching status!", 0);
+      showNotification("Error fetching status!", 0, 2000);
       return;
     }
     if (data[0].city === null) {
@@ -115,14 +114,12 @@ export const StatusPage = () => {
       showDiaryModal();
     } else {
       //navigate("/");
-      showNotification("Status Updated", 1);
+      showNotification("Status Updated", 1, 2000);
     }
   };
 
   const selectStyle =
     "block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
-
-  //if (statusQuery.isLoading || surfSpotsQuery.isLoading) return <Loading />;
 
   return (
     <div className="flex justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
@@ -135,7 +132,7 @@ export const StatusPage = () => {
           userId={userId}
         />
       </Modal>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
+      <form className="slide-in flex flex-col" onSubmit={handleSubmit}>
         <h1 className="text-5xl text-[#FFE8A3]">Update Status</h1>
         <div className="mt-4">
           <label htmlFor="status" className="text-xl text-[#FFE8A3]">
@@ -223,6 +220,7 @@ export const StatusPage = () => {
             ))}
           </div>
         </div>
+
         <button
           className="mt-4 border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
           type="submit"

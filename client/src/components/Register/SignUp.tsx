@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "../../Supa/connect";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../hooks/NotificationContext";
 import { createUser } from "../../Supa/queries/userQuery";
@@ -19,18 +18,22 @@ export const SignUp = ({
   //need to tell user they must verify email before logging in
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { data, error } = await createUser(email, password);
+    const { data: userData, error } = await createUser(email, password);
     if (error) {
       if (error.message === "Email rate limit exceeded") {
-        showNotification("We've had too many sign ups! Please wait an hour", 0);
+        showNotification(
+          "We've had too many sign ups! Please wait an hour",
+          0,
+          null
+        );
       } else {
-        showNotification(error.message, 0);
+        showNotification(error.message, 0, null);
       }
       return;
     }
-    showNotification("Check your email to verify your account", 1);
+    showNotification("Check your email to verify your account", 1, 5000);
     const { data: statusData, error: statusError } = await createStatus(
-      data.user.id,
+      userData.user?.id,
       displayName
     );
     navigate("/spots");

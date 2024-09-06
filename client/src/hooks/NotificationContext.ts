@@ -1,7 +1,11 @@
 import { createContext, useContext } from "react";
 
 interface NotificationContextType {
-  showNotification: (content: string, newColor: number) => void;
+  showNotification: (
+    content: string,
+    newColor: number,
+    time: number | null
+  ) => void;
 }
 
 export const NotificationContext = createContext<

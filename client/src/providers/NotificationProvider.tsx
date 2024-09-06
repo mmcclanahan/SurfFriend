@@ -7,13 +7,17 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [notificationContent, setNotificationContent] = useState("");
   const [color, setColor] = useState(1);
 
-  const showNotification = (content: string, newColor: number) => {
+  const showNotification = (
+    content: string,
+    newColor: number,
+    newTime: number | null
+  ) => {
     setNotificationContent(content);
     setColor(newColor);
     setNotify(true);
     setTimeout(() => {
       setNotify(false);
-    }, 2000);
+    }, newTime || 2000);
   };
 
   return (

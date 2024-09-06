@@ -17,15 +17,18 @@ export const Header = () => {
 
   const indexToPath = {
     1: "/status",
-    2: "/",
+    2: "/spots",
     3: "/calendar",
   };
-  //change so that getSpots isnt called just the surfspotsquerry is checked so theres no call
   const clickButton = async (num: number) => {
+    if (num === 5) {
+      logOut();
+      return;
+    }
     if (num === 1) {
       const { error, data } = await getSpots();
       if (data?.length === 0 || error) {
-        showNotification("Make a Surf Spot first!", 0);
+        showNotification("Make a Surf Spot first!", 0, 3000);
         return;
       }
     }
@@ -37,7 +40,7 @@ export const Header = () => {
   const logOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error("Error logging out:", error.message);
+      showNotification("Error logging out:", 0, 3000);
       return;
     }
     navigate("/");
@@ -49,7 +52,7 @@ export const Header = () => {
         src={SurfFriendPageLogo}
         alt="SurfFriend Logo"
         className="cursor-pointer h-28"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/spots")}
       />
       <div className="flex items-end gap-5">
         <HeaderButton
@@ -70,7 +73,18 @@ export const Header = () => {
           index={3}
           text={"Calender"}
         />
-        <button onClick={logOut}>LOGOUT</button>
+        <HeaderButton
+          selected={selected}
+          clickFn={clickButton}
+          index={4}
+          text={"Profile"}
+        />
+        <HeaderButton
+          selected={selected}
+          clickFn={clickButton}
+          index={5}
+          text={"Log Out"}
+        />
       </div>
     </div>
   );
