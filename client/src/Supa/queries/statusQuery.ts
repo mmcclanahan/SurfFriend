@@ -1,7 +1,7 @@
 import { supabase } from "../connect.js";
 import { StatusForm } from "../../types/types.js";
 
-export const getStatus = async (userId) => {
+export const getStatus = async (userId: string) => {
   const response = await supabase
     .from("UserStatus")
     .select()
@@ -19,15 +19,13 @@ export const updateStatus = async (statusForm: StatusForm) => {
 };
 
 export const createStatus = async (id: string, displayName: string) => {
-  const response = await supabase
-    .from("UserStatus")
-    .insert({
-      user_id: id,
-      status: 1,
-      display_name: displayName,
-      rating: 3,
-      spot_name: "",
-      city: "",
-    });
+  const response = await supabase.from("UserStatus").insert({
+    user_id: id,
+    status: 1,
+    display_name: displayName,
+    rating: 3,
+    spot_name: "",
+    city: "",
+  });
   return response;
 };

@@ -2,7 +2,7 @@ export const SessionCondition = ({
   conditions,
 }: {
   conditions: string;
-  diary: string;
+  diary: string | undefined;
 }) => {
   return (
     <div>

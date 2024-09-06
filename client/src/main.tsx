@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SurfSpotsPage } from "./pages/SurfSpotsPage.tsx";
-//import { CalendarPage } from "./pages/CalendarPage.tsx";
+import { CalendarPage } from "./pages/CalendarPage.tsx";
 import { StatusPage } from "./pages/StatusPage.tsx";
 import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { HomePage } from "./pages/HomePage.tsx";
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         children: [
           { path: "/spots", element: <SurfSpotsPage /> },
           { path: "/status", element: <StatusPage /> },
-          /*{ path: "/calendar", element: <CalendarPage /> },*/
+          { path: "/calendar", element: <CalendarPage /> },
         ],
       },
     ],

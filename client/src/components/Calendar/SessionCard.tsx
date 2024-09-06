@@ -13,7 +13,7 @@ export const SessionCard = ({ session }: { session: Session }) => {
 
   const toggleConditions = () => setShowConditions(!showConditions);
 
-  const time = format(parseISO(session.createdAt), "hh:mm a");
+  const time = format(parseISO(session.created_at), "hh:mm a");
   const header = "Delete this session from the Calendar?";
 
   return (
@@ -27,7 +27,7 @@ export const SessionCard = ({ session }: { session: Session }) => {
       </div>
       <div onClick={toggleConditions}>
         <div className="flex border-b-2 pb-1 border-[#d7c07b]">
-          <p className="text-xl font-bold text-[#FFE8A3]">{`${session.spotName} in ${session.city}`}</p>
+          <p className="text-xl font-bold text-[#FFE8A3]">{`${session.spot_name} in ${session.city}`}</p>
         </div>
         <h3 className="text-sm mt-2 text-[#FFCD29]">Diary Entry</h3>
         <p
@@ -54,7 +54,7 @@ export const SessionCard = ({ session }: { session: Session }) => {
           confirmFn={() => {}}
           info={[
             time,
-            session.spotName,
+            session.spot_name,
             session.city,
             `Rating: ${session.rating}`,
           ]}

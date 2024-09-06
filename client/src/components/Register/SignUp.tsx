@@ -32,10 +32,7 @@ export const SignUp = ({
       return;
     }
     showNotification("Check your email to verify your account", 1, 5000);
-    const { data: statusData, error: statusError } = await createStatus(
-      userData.user?.id,
-      displayName
-    );
+    await createStatus(userData.user?.id, displayName);
     navigate("/spots");
   };
   return (

@@ -10,7 +10,7 @@ export const SessionView = ({ sessions }: { sessions: Session[] }) => {
         </div>
       ) : (
         sessions.map((session) => (
-          <SessionCard key={session.createdAt} session={session} />
+          <SessionCard key={session.created_at} session={session} />
         ))
       )}
     </div>

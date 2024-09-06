@@ -1,38 +1,47 @@
 import { useEffect, useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider, DateCalendar } from "@mui/x-date-pickers";
-import { getAllSessions } from "../API/sessions";
+import { useUser } from "../hooks/UserContext";
 import { Session } from "../types/types";
 import { parseISO, isSameDay } from "date-fns";
 import { SessionDay } from "../components/Calendar/SessionDay";
 import { SessionView } from "../components/Calendar/SessionView";
+import { getAllSessions } from "../Supa/queries/sessionsQuery";
+import { useNotification } from "../hooks/NotificationContext";
 
-export const CalendarPage = ({ userId }: { userId: number }) => {
+export const CalendarPage = () => {
   const initialValue = new Date();
+  const { userId } = useUser();
+  const { showNotification } = useNotification();
   const [value, setValue] = useState<Date>(initialValue);
   const [allSessions, setAllSessions] = useState<Session[]>([]);
   const [selectedSessions, setSelectedSessions] = useState<Session[]>([]);
 
-  useEffect(() => {
-    const fetchSessions = async () => {
-      try {
-        const sessions = await getAllSessions(userId);
-        setAllSessions(sessions);
-        const sessionsForToday = sessions.filter((session: Session) =>
-          isSameDay(session.createdAt, value)
-        );
-        setSelectedSessions(sessionsForToday);
-      } catch (error) {
-        console.error(error);
+  const fetchSessions = async () => {
+    try {
+      const { data: sessions, error } = await getAllSessions(userId);
+      if (error) {
+        showNotification("Error fetching sessions", 0, 3000);
+        return;
       }
-    };
+      setAllSessions(sessions);
+      const sessionsForToday = sessions.filter((session: Session) =>
+        isSameDay(session.created_at, value)
+      );
+      setSelectedSessions(sessionsForToday);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
     fetchSessions();
-  }, [userId]);
+  }, []);
 
   const handleDayClick = (newValue: Date) => {
     setValue(newValue);
     const sessions = allSessions.filter((session) =>
-      isSameDay(session.createdAt, newValue)
+      isSameDay(session.created_at, newValue)
     );
     setSelectedSessions(sessions);
   };

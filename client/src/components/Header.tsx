@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSurfSpots } from "../hooks/useSurfSpots";
 import { useNotification } from "../hooks/NotificationContext";
 import { HeaderButton } from "./HeaderButton";
 import SurfFriendPageLogo from "../assets/SurfFriendPageLogo.png";
-import { supabase } from "../Supa/connect";
 import { getSpots } from "../Supa/queries/surfSpotsQuery";
+import { signOut } from "../Supa/queries/userQuery";
 import "../index.css";
 
 export const Header = () => {
@@ -15,11 +14,7 @@ export const Header = () => {
     return parseInt(localStorage.getItem("selectedPage") || "2", 10);
   });
 
-  const indexToPath = {
-    1: "/status",
-    2: "/spots",
-    3: "/calendar",
-  };
+  const indexToPath: string[] = ["/status", "/spots", "/calendar"];
   const clickButton = async (num: number) => {
     if (num === 5) {
       logOut();
@@ -38,7 +33,7 @@ export const Header = () => {
   };
 
   const logOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await signOut();
     if (error) {
       showNotification("Error logging out:", 0, 3000);
       return;
@@ -58,19 +53,19 @@ export const Header = () => {
         <HeaderButton
           selected={selected}
           clickFn={clickButton}
-          index={1}
+          index={0}
           text={"Status"}
         />
         <HeaderButton
           selected={selected}
           clickFn={clickButton}
-          index={2}
+          index={1}
           text={"Surf Spots"}
         />
         <HeaderButton
           selected={selected}
           clickFn={clickButton}
-          index={3}
+          index={2}
           text={"Calender"}
         />
         <HeaderButton

@@ -25,7 +25,8 @@ export interface Session {
   spot_name: string;
   rating: number;
   diary?: string;
-  //conditions?: string;
+  created_at: string;
+  conditions?: string;
 }
 
 export interface SurfSpot {

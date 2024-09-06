@@ -1,8 +1,7 @@
 import { supabase } from "../connect.js";
 import { Session } from "../../types/types.js";
 
-//for creating a session it will also increment the count of the surfspot times surfed// when diary accept btn is clicked put both in a function
-export const getAllSessions = async (userId) => {
+export const getAllSessions = async (userId: string) => {
   const response = await supabase
     .from("Sessions")
     .select()
