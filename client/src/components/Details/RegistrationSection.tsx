@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { RegisterModalAndButton } from "./RegisterModalAndButton";
+import { useEffect } from "react";
 import { supabase } from "../../Supa/connect.js";
 import { useNavigate } from "react-router-dom";
-import SurfFriendPageLogo from "../../assets/SurfFriendPageLogo.png";
-import Background1 from "../../assets/Background1.svg";
+import { RegisterModalAndButton } from "./RegisterModalAndButton.js";
 
 export const RegistrationSection = () => {
   const navigate = useNavigate();
@@ -22,33 +20,11 @@ export const RegistrationSection = () => {
   }, []);
 
   return (
-    <div
-      className="h-screen setion1"
-      style={{ backgroundImage: `url(${Background1})` }}
-    >
-      <div className="flex justify-evenly">
-        <img
-          className="max-h-96"
-          src={SurfFriendPageLogo}
-          alt="Surf Friend Logo"
-        />
-        <RegisterModalAndButton />
-      </div>
-      <div className="welcome">
-        <h3>Welcome to Surf Friend!</h3>
-        <p>A surf session tracker and diary!</p>
-        <p>Log in or sign up!</p>
-      </div>
-      <div className="comingFeatures">
-        <h3>Stick around! More features coming soon:</h3>
-        <ul>
-          <li>Automatically save the conditions of a highly rated session.</li>
-          <li>
-            Push Notifications when the forecasts match your favorite sessions!
-          </li>
-          <li>Live feed of friend's sessions and comments.</li>
-        </ul>
-      </div>
+    <div className="flex flex-col justify-center items-center h-screen bg-white bg-opacity-40">
+      <h3 className="text-8xl">Welcome to Surf Friend!</h3>
+      <p className="text-4xl">A surf session tracker and diary!</p>
+      <RegisterModalAndButton />
+      <p>Scroll down to learn more!</p>
     </div>
   );
 };

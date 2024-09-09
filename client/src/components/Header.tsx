@@ -20,10 +20,10 @@ export const Header = () => {
       logOut();
       return;
     }
-    if (num === 1) {
+    if (num === 0) {
       const { error, data } = await getSpots();
       if (data?.length === 0 || error) {
-        showNotification("Make a Surf Spot first!", 0, 3000);
+        showNotification("Make a Surf Spot first!", 0, 2000);
         return;
       }
     }

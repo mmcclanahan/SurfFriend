@@ -15,7 +15,6 @@ export const SignUp = ({
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  //need to tell user they must verify email before logging in
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     const { data: userData, error } = await createUser(email, password);
@@ -31,6 +30,8 @@ export const SignUp = ({
       }
       return;
     }
+    console.log(userData);
+    console.log(userData.user?.id);
     showNotification("Check your email to verify your account", 1, 5000);
     await createStatus(userData.user?.id, displayName);
     navigate("/spots");
