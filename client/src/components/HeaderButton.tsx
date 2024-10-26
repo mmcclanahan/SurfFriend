@@ -13,9 +13,9 @@ export const HeaderButton = ({
 }: HeaderButtonProps) => {
   return (
     <button
-      className={`text-[#FFCD29] text-xl py-2 px-4 bold rounded  border hover:border hover:border-[#FFCD29] ${
-        selected === index ? "border-[#FFCD29]" : "border-transparent"
-      }`}
+      className={
+        "group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-[rgb(0,0,0,0.2)] bg-white bg-opacity-80 px-6 font-medium text-black text-2xl transition-all shadow-[0px_4px_1px_rgb(0,0,0,0.4)] active:translate-y-[2px] active:shadow-none"
+      }
       onClick={() => {
         clickFn(index);
       }}

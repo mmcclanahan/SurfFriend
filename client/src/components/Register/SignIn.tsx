@@ -21,7 +21,7 @@ export const SignIn = ({
       showNotification(error.message, 0, 5000);
       return;
     }
-    navigate("/spots");
+    navigate("/feed");
   };
 
   return (

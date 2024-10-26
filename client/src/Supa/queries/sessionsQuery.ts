@@ -9,7 +9,13 @@ export const getAllSessions = async (userId: string) => {
 
   return response;
 };
-
+// get all friends sessions, need to see who the friends are
+export const getFriendsSessions = async (userId: string) => {
+  const response = await supabase.rpc("get_friends_sessions", {
+    p_user_id: `${userId}`,
+  });
+  return response;
+};
 export const createSession = async (session: Session, user_id: string) => {
   const { city, spot_name, rating, diary } = session;
   const response = await supabase
@@ -18,3 +24,5 @@ export const createSession = async (session: Session, user_id: string) => {
 
   return response;
 };
+
+//export const getFriendsSessions = async (userId: string) => {

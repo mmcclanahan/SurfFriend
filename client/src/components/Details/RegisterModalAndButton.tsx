@@ -12,7 +12,7 @@ export const RegisterModalAndButton = () => {
     <div>
       <button
         onClick={() => setShowModal(true)}
-        className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-[rgb(0,0,0,0.2)] bg-transparent px-6 font-medium text-black text-2xl transition-all shadow-[0px_4px_1px_rgb(0,0,0,0.4)] active:translate-y-[2px] active:shadow-none"
+        className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-[rgb(0,0,0,0.2)] bg-white bg-opacity-80 px-6 font-medium text-black text-2xl transition-all shadow-[0px_4px_1px_rgb(0,0,0,0.4)] active:translate-y-[2px] active:shadow-none"
       >
         Get out there!
       </button>

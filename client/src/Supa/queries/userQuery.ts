@@ -7,6 +7,7 @@ export const getUser = async () => {
 
 export const createUser = async (email: string, password: string) => {
   const response = await supabase.auth.signUp({ email, password });
+  console.log(response);
   return response;
 };
 
