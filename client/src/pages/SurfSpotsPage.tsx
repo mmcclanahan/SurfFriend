@@ -69,7 +69,7 @@ export const SurfSpotsPage = () => {
   };
 
   return (
-    <div className="slide-in flex flex-col mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+    <div className="fade-in flex flex-col mt-[10vh] h-[70vh] w-[80vw] mx-auto">
       <div className="">
         <AddSpotForm
           cities={Object.keys(cities)}
@@ -78,7 +78,7 @@ export const SurfSpotsPage = () => {
         />
       </div>
       <div className="justify-center max-h-[90%] flex gap-[2vw] mt-4">
-        <div className="slide-up flex flex-col overflow-auto w-11/12">
+        <div className="fade-in flex flex-col overflow-auto w-11/12">
           <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3] w-full">
             Cities
           </h3>
@@ -98,7 +98,7 @@ export const SurfSpotsPage = () => {
             )}
           </div>
         </div>
-        <div className="slide-up flex flex-col overflow-auto w-11/12">
+        <div className="fade-in flex flex-col overflow-auto w-11/12">
           <h3 className="rounded border border-[#FFE8A3] text-center text-[#FFE8A3] w-full">
             Surf Spots
           </h3>

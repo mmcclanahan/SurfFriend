@@ -132,7 +132,7 @@ export const StatusPage = () => {
           userId={userId}
         />
       </Modal>
-      <form className="slide-in flex flex-col" onSubmit={handleSubmit}>
+      <form className="fade-in flex flex-col" onSubmit={handleSubmit}>
         <h1 className="text-5xl text-[#FFE8A3]">Update Status</h1>
         <div className="mt-4">
           <label htmlFor="status" className="text-xl text-[#FFE8A3]">

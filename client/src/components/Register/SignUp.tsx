@@ -15,27 +15,42 @@ export const SignUp = ({
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
+  //function to handle sign up
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { data: userData, error } = await createUser(email, password);
-    if (error) {
-      if (error.message === "Email rate limit exceeded") {
-        showNotification(
-          "We've had too many sign ups! Please wait an hour",
-          0,
-          null
-        );
-      } else {
-        showNotification(error.message, 0, null);
+
+    try {
+      const { data: userData, error } = await createUser(email, password);
+      if (error) {
+        handleSignUpError(error);
+        return;
       }
-      return;
+
+      showNotification("Check your email to verify your account", 1, 5000);
+
+      if (userData.user?.id) {
+        await createStatus(userData.user.id, displayName);
+        navigate("/feed");
+      }
+    } catch (err) {
+      showNotification(
+        "Something went wrong. Please try again later.",
+        0,
+        null
+      );
     }
-    console.log(userData);
-    console.log(userData.user?.id);
-    showNotification("Check your email to verify your account", 1, 5000);
-    await createStatus(userData.user?.id, displayName);
-    navigate("/spots");
   };
+
+  //helper function for error handling
+  const handleSignUpError = (error: { message: string }) => {
+    const errorMessage =
+      error.message === "Email rate limit exceeded"
+        ? "We've had too many sign-ups! Please wait an hour."
+        : error.message;
+
+    showNotification(errorMessage, 0, null);
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-center mt-8">Sign Up</h1>

@@ -47,7 +47,6 @@ export const acceptFriendRequest = async (friendId: string, userId: string) => {
   if (userUpdateError) {
     return { data: null, error: "Error updating your friend request status" };
   }
-
   // friend side
   const { data: friendResponse, error: friendUpdateError } = await supabase
     .from("Friends")
@@ -57,6 +56,7 @@ export const acceptFriendRequest = async (friendId: string, userId: string) => {
   if (friendUpdateError) {
     return { data: null, error: "Error updating the friend's request status" };
   }
+
   return { data: { userResponse, friendResponse }, error: null };
 };
 

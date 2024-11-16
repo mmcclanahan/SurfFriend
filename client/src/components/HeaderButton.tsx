@@ -1,26 +1,26 @@
-export interface HeaderButtonProps {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
+interface HeaderButtonProps {
   selected: number;
-  clickFn: (num: number) => void;
-  index: number;
-  text: string;
+  clickFn: () => void;
+  icon: IconDefinition;
 }
 
 export const HeaderButton = ({
   selected,
   clickFn,
-  index,
-  text,
+  icon,
 }: HeaderButtonProps) => {
   return (
-    <button
+    <FontAwesomeIcon
       className={
-        "group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-[rgb(0,0,0,0.2)] bg-white bg-opacity-80 px-6 font-medium text-black text-2xl transition-all shadow-[0px_4px_1px_rgb(0,0,0,0.4)] active:translate-y-[2px] active:shadow-none"
+        "group relative inline-flex w-28 h-12 items-center justify-center overflow-hidden px-6 font-medium text-black text-2xl transition-all active:translate-y-[2px] active:shadow-none"
       }
       onClick={() => {
-        clickFn(index);
+        clickFn();
       }}
-    >
-      {text}
-    </button>
+      icon={icon}
+    />
   );
 };
