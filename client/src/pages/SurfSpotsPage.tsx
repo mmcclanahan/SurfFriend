@@ -32,6 +32,11 @@ export const SurfSpotsPage = () => {
     fetchSpots();
   }, []);
 
+  const addAndAppendToState = (spot: SurfSpot) => {
+    const newSpots = [...surfSpots, spot];
+    setSurfSpots(newSpots);
+  };
+
   const cities = surfSpots.reduce(
     (acc: { [key: string]: number }, spot: SurfSpot) => {
       if (!acc[spot.city]) {
@@ -75,6 +80,7 @@ export const SurfSpotsPage = () => {
           cities={Object.keys(cities)}
           surfSpots={surfSpots}
           city={selectedCity}
+          addAndAppendToState={addAndAppendToState}
         />
       </div>
       <div className="justify-center max-h-[90%] flex gap-[2vw] mt-4">
@@ -108,7 +114,7 @@ export const SurfSpotsPage = () => {
             ) : (
               spots.map((spot: SurfSpot) => (
                 <SpotCard
-                  key={spot.id}
+                  key={spot.spot_name}
                   spot={spot}
                   deleteSurfSpot={deleteSurfSpot}
                 />

@@ -7,7 +7,12 @@ import { Modal } from "../Modal";
 import { addSpot } from "../../Supa/queries/surfSpotsQuery";
 import { useUser } from "../../hooks/UserContext";
 
-export const AddSpotForm = ({ city, cities, surfSpots }: AddSpotFormProps) => {
+export const AddSpotForm = ({
+  city,
+  cities,
+  surfSpots,
+  addAndAppendToState,
+}: AddSpotFormProps) => {
   const [selectedCity, setSelectedCity] = useState(city || "Other");
   const [newCity, setNewCity] = useState("");
   const [name, setName] = useState("");
@@ -37,7 +42,7 @@ export const AddSpotForm = ({ city, cities, surfSpots }: AddSpotFormProps) => {
           .map((spot) => spot.spot_name)
       )
     ) {
-      showNotification("Spot already exists", 0);
+      showNotification("Spot already exists", 0, 2000);
       return;
     }
     const checkedName = checkMatchingText(
@@ -51,14 +56,16 @@ export const AddSpotForm = ({ city, cities, surfSpots }: AddSpotFormProps) => {
       city: city,
       user_id: userId,
     };
-    const { data, error } = await addSpot(surfSpot);
+    const { error } = await addSpot(surfSpot);
     if (error) {
       showNotification(
         error.message || "City doesn't exist! Is there another name?",
-        0
+        0,
+        2000
       );
     } else {
-      showNotification("Spot added successfully!", 1);
+      addAndAppendToState(surfSpot);
+      showNotification("Spot added successfully!", 1, 2000);
     }
     //re get spots
     setShowModal(false);
