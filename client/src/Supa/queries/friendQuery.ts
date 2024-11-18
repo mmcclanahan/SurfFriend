@@ -7,6 +7,37 @@ export const getAllFriends = async (userId: string) => {
   });
   return response;
 };
+//get user and their friends sessions
+export const getFriendsSessions = async (userId: string) => {
+  const friends = await getFriends(userId);
+  if (friends.error) {
+    return { data: null, error: "Error getting friends" };
+  }
+
+  const friendIds = friends.data.map((friend) => friend.friend_id);
+
+  if (!friendIds.length) {
+    return { data: [], error: null };
+  }
+  friendIds.push(userId);
+  //get friend sessions
+  const sessionsResponse = await supabase
+    .from("Sessions")
+    .select("*, UserStatus(display_name)")
+    .in("user_id", friendIds)
+    .order("created_at", { ascending: false });
+
+  return sessionsResponse;
+};
+
+export const getFriends = async (userId: string) => {
+  const response = await supabase
+    .from("Friends")
+    .select()
+    .eq("user_id", userId)
+    .eq("request", "accepted");
+  return response;
+};
 
 export const getFriend = async (friendUsername: string) => {
   const response = await supabase

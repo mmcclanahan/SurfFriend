@@ -29,6 +29,17 @@ export interface Session {
   conditions?: string;
 }
 
+export interface FriendSession {
+  UserStatus: { display_name: string };
+  user_id: number;
+  city: string;
+  spot_name: string;
+  rating: number;
+  diary?: string;
+  created_at: string;
+  conditions?: string;
+}
+
 export interface SurfSpot {
   id: number;
   city: string;
@@ -41,6 +52,7 @@ export interface AddSpotFormProps {
   city: string;
   cities: string[];
   surfSpots: SurfSpot[];
+  addAndAppendToState: (spot: SurfSpot) => void;
 }
 
 export interface ConfirmProps {
