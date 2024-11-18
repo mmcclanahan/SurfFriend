@@ -30,7 +30,7 @@ export const FeedPage = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="flex flex-col items-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+    <div className="flex flex-col items-center mt-[10vh] h-[70vh] w-[80vw] mx-auto fade-in">
       <div className="flex gap-4 mb-4">
         <ToggleButton
           active={viewAll}

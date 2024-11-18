@@ -1,13 +1,19 @@
 import { FriendSession } from "../../types/types";
 import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
 
-const formatTimeStamp = (timestamp: string): string => {
+/*const formatTimeStamp = (timestamp: string): string => {
   const date = new Date(timestamp);
   if (isToday(date)) return `${format(date, "h:mm a")}`;
   if (isYesterday(date)) return `Yesterday, ${format(date, "h:mm a")}`;
   return `${format(date, "MMM d, yyyy h:mm a")} (${formatDistanceToNow(date, {
     addSuffix: true,
   })})`;
+};*/
+const formatTimeStamp = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  if (isToday(date)) return `Today (${format(date, "h:mm a")})`;
+  if (isYesterday(date)) return `Yesterday (${format(date, "h:mm a")})`;
+  return `${format(date, "M/d/yy (h:mm a)")}`;
 };
 
 export const DiaryCard = ({ session }: { session: FriendSession }) => (
