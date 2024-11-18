@@ -74,38 +74,44 @@ export const Header = () => {
   };
 
   return (
-    <div className="flex justify-between h-28 pr-10 pl-10 pt-2">
+    <div className="flex justify-between items-center h-22 pr-10 pl-8 pt-2 border-b-2">
       <img
         src={SurfFriendPageLogo}
         alt="SurfFriend Logo"
-        className="cursor-pointer h-28"
+        className="cursor-pointer h-20 w-22"
         onClick={() => navigate("/feed")}
       />
-      <div className="flex items-end gap-5">
-        <HeaderButton
-          selected={selected}
-          clickFn={() => navigate("/feed")}
-          icon={faHouse}
-        />
-        <HeaderButton
-          selected={selected}
-          clickFn={() => toggleDropdown("+")}
-          icon={faPlus}
-        />
-        {dropdownVisible === "+" && (
-          <DropDown
-            dropdownRef={dropdownRef}
-            textAndFunctionObject={{
-              "Update Status": handleNavigationToStatus,
-              "Add Session": handleNavigationToStatus,
-            }}
+      <div className="flex gap-10 h-1">
+        <div className="relative">
+          <HeaderButton
+            selected={selected}
+            clickFn={() => navigate("/feed")}
+            icon={faHouse}
           />
-        )}
-        <HeaderButton
-          selected={selected}
-          clickFn={() => handleNavigationToSurfSpots()}
-          icon={faMapLocationDot}
-        />
+        </div>
+        <div className="relative">
+          <HeaderButton
+            selected={selected}
+            clickFn={() => toggleDropdown("+")}
+            icon={faPlus}
+          />
+          {dropdownVisible === "+" && (
+            <DropDown
+              dropdownRef={dropdownRef}
+              textAndFunctionObject={{
+                "Update Status": handleNavigationToStatus,
+                "Add Session": handleNavigationToStatus,
+              }}
+            />
+          )}
+        </div>
+        <div className="relative">
+          <HeaderButton
+            selected={selected}
+            clickFn={() => handleNavigationToSurfSpots()}
+            icon={faMapLocationDot}
+          />
+        </div>
         {/*
         <HeaderButton
           selected={selected}
@@ -114,19 +120,21 @@ export const Header = () => {
         />*/}
       </div>
       <div className="flex items-end gap-5">
-        <ProfileButton
-          selected={selected}
-          clickFn={() => toggleDropdown("Profile")}
-          text={"Profile"}
-        />
-        {dropdownVisible === "Profile" && (
-          <DropDown
-            dropdownRef={dropdownRef}
-            textAndFunctionObject={{
-              "Log Out": handleLogOut,
-            }}
+        <div className="relative">
+          <ProfileButton
+            selected={selected}
+            clickFn={() => toggleDropdown("Profile")}
+            text={"Profile"}
           />
-        )}
+          {dropdownVisible === "Profile" && (
+            <DropDown
+              dropdownRef={dropdownRef}
+              textAndFunctionObject={{
+                "Log Out": handleLogOut,
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

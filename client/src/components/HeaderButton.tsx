@@ -15,7 +15,7 @@ export const HeaderButton = ({
   return (
     <FontAwesomeIcon
       className={
-        "group relative inline-flex w-28 h-12 items-center justify-center overflow-hidden px-6 font-medium text-black text-2xl transition-all active:translate-y-[2px] active:shadow-none"
+        "h-8 w-auto transition-all active:translate-y-[2px] active:shadow-none"
       }
       onClick={() => {
         clickFn();

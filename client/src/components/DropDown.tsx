@@ -10,9 +10,12 @@ export const DropDown = ({
   textAndFunctionObject: TextAndFunctionObject;
 }) => {
   return (
-    <div ref={dropdownRef}>
+    <div
+      ref={dropdownRef}
+      className="z-50 absolute bottom-0 right-0 translate-y-full bg-white border border-gray-300 rounded shadow-lg p-2"
+    >
       {Object.entries(textAndFunctionObject).map(([text, action]) => (
-        <div key={text} onClick={() => action()}>
+        <div className="w-max" key={text} onClick={() => action()}>
           {text}
         </div>
       ))}
