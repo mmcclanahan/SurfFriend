@@ -8,7 +8,7 @@ export const getAllFriends = async (userId: string) => {
   return response;
 };
 //get user and their friends sessions
-export const getFriendsSessions = async (userId: string) => {
+export const getAllRelatedSessions = async (userId: string) => {
   const friends = await getFriends(userId);
   if (friends.error) {
     return { data: null, error: "Error getting friends" };

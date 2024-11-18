@@ -1,38 +1,49 @@
 import { useEffect, useState } from "react";
-import { getFriendsSessions } from "../Supa/queries/friendQuery";
+import { getAllRelatedSessions } from "../Supa/queries/friendQuery";
 import { useUser } from "../hooks/UserContext";
+import { FeedView } from "../components/Feed/FeedView";
+import { ToggleButton } from "../components/ToggleButton";
 import { FriendSession } from "../types/types";
-import { DiaryCard } from "../components/Feed/DiaryCard";
 
 export const FeedPage = () => {
-  //get all friends sessions
-  //get users friends
-  //make a view for the feed
-  //have a toggle to do friends vs just you
   const { userId } = useUser();
-  const [friendsSessions, setFriendsSessions] = useState<FriendSession[]>([]);
+  const [allSessions, setAllSessions] = useState<FriendSession[]>([]);
+  const [viewAll, setViewAll] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getFriends = async () => {
-      const { data, error } = await getFriendsSessions(userId);
+    const fetchSessions = async () => {
+      setLoading(true);
+      const { data, error } = await getAllRelatedSessions(userId);
       if (error) {
-        console.log("Error getting friends sessions:", error);
-        return;
+        setError("Failed to fetch sessions.");
+      } else {
+        setAllSessions(data || []);
       }
-      if (data) {
-        setFriendsSessions(data);
-      }
+      setLoading(false);
     };
-    getFriends();
-  }, []);
-  //add message if no sessions from friends
+    fetchSessions();
+  }, [userId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
-    <div className="flex justify-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
-      <div>
-        {friendsSessions.map((session) => {
-          return <DiaryCard key={session.created_at} session={session} />;
-        })}
+    <div className="flex flex-col items-center mt-[10vh] h-[70vh] w-[80vw] mx-auto">
+      <div className="flex gap-4 mb-4">
+        <ToggleButton
+          active={viewAll}
+          onClick={() => setViewAll(true)}
+          label="View All"
+        />
+        <ToggleButton
+          active={!viewAll}
+          onClick={() => setViewAll(false)}
+          label="My Sessions"
+        />
       </div>
+      <FeedView allSessions={allSessions} viewAll={viewAll} userId={userId} />
     </div>
   );
 };

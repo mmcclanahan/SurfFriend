@@ -21,6 +21,7 @@ export interface StatusForm {
 
 export interface Session {
   user_id: number;
+  id: number;
   city: string;
   spot_name: string;
   rating: number;
@@ -31,7 +32,8 @@ export interface Session {
 
 export interface FriendSession {
   UserStatus: { display_name: string };
-  user_id: number;
+  id: number;
+  user_id: string;
   city: string;
   spot_name: string;
   rating: number;
