@@ -15,7 +15,8 @@ const formatTimeStamp = (timestamp: string): string => {
   if (isYesterday(date)) return `Yesterday (${format(date, "h:mm a")})`;
   return `${format(date, "M/d/yy (h:mm a)")}`;
 };
-
+//make the city and spot bigger and rating bigger
+//make the cards wider
 export const DiaryCard = ({ session }: { session: FriendSession }) => (
   <div className="flex flex-col border p-4 w-full bg-white rounded shadow">
     <div className="flex justify-between items-center mb-2">

@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../hooks/NotificationContext";
-import { HeaderButton } from "./HeaderButton";
-import { ProfileButton } from "./ProfileButton";
-import SurfFriendPageLogo from "../assets/SurfFriendPageLogo.png";
-import { getSpots } from "../Supa/queries/surfSpotsQuery";
-import { signOut } from "../Supa/queries/userQuery";
-import { DropDown } from "./DropDown";
-import "../index.css";
+import { useNotification } from "../../hooks/NotificationContext";
+import { HeaderButton } from "../HeaderButton";
+import { ProfileButton } from "../ProfileButton";
+import SurfFriendPageLogo from "../../assets/SurfFriendPageLogo.png";
+import { getSpots } from "../../Supa/queries/surfSpotsQuery";
+import { signOut } from "../../Supa/queries/userQuery";
+import { DropDown } from "../DropDown";
+import "../../index.css";
 import { set } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

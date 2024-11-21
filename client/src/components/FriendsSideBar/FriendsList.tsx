@@ -3,7 +3,6 @@ import { Loading } from "../Loading";
 import { FriendCard } from "./FriendCard";
 import { Friend } from "../../types/types";
 import { useNotification } from "../../hooks/NotificationContext";
-import "../../styles/friendSideBar.css";
 import {
   getAllFriends,
   createFriendRequest,
@@ -51,12 +50,12 @@ export const FriendsList = () => {
   };
 
   return (
-    <div className="friendSideBar">
+    <div className="border">
       <div className="friendSideBar-content">
         <h3 className="text-lg font-bold rounded bg-black text-white">
           Friends
         </h3>
-        <div className="flex items-center gap-1 ">
+        <div className="addFriendPart flex items-center gap-1 ">
           <input
             className="rounded-md p-1 w-40"
             name="friendUsername"
@@ -70,7 +69,7 @@ export const FriendsList = () => {
             className="bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded"
             onClick={addFriend}
           >
-            I
+            Add
           </button>
         </div>
         {allFriends.length === 0 ? (

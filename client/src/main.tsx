@@ -7,7 +7,7 @@ import { CalendarPage } from "./pages/CalendarPage.tsx";
 import { StatusPage } from "./pages/StatusPage.tsx";
 import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 import { HomePage } from "./pages/HomePage.tsx";
-import { Layout } from "./components/Layout.tsx";
+import { Layout } from "./components/LayoutGroup/Layout.tsx";
 import { PrivateRoute } from "./components/PrivateRoute.tsx";
 import { NotificationProvider } from "./providers/NotificationProvider.tsx";
 import { UserProvider } from "./providers/UserProvider.tsx";

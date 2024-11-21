@@ -195,31 +195,33 @@ export const StatusPage = () => {
             ))}
           </select>
         </div>
-        <div className="mt-4">
-          <label htmlFor="rating" className="mt-2 text-xl text-[#FFE8A3]">
-            Rating
-          </label>
-          <div className="flex gap-20">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <button
-                key={value}
-                type="button"
-                id="rating"
-                className={`w-10 h-10 flex items-center justify-center border rounded-md ${
-                  rating === value
-                    ? "bg-myGreen text-myBlack"
-                    : "bg-myGray text-white"
-                } hover:bg-myGreenHover hover:text-myBlack`}
-                onClick={() => {
-                  setRating(value);
-                }}
-                disabled={status !== 4}
-              >
-                {value}
-              </button>
-            ))}
+        {status === 4 && (
+          <div className="mt-4">
+            <label htmlFor="rating" className="mt-2 text-xl text-[#FFE8A3]">
+              Rating
+            </label>
+            <div className="flex gap-20">
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  id="rating"
+                  className={`w-10 h-10 flex items-center justify-center border rounded-md ${
+                    rating === value
+                      ? "bg-myGreen text-myBlack"
+                      : "bg-myGray text-white"
+                  } hover:bg-myGreenHover hover:text-myBlack`}
+                  onClick={() => {
+                    setRating(value);
+                  }}
+                  disabled={status !== 4}
+                >
+                  {value}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <button
           className="mt-4 border bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-myYellow focus:ring-opacity-50"
