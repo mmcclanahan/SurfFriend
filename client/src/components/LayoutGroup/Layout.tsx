@@ -5,16 +5,26 @@ import { StatusBox } from "./StatusBox";
 import { ProfileBox } from "./ProfileBox";
 
 export const Layout = () => {
-  //status top left under header
-  //same alignment at bottom left for profile tab
-  //right side friends list
   return (
-    <div>
+    <div className="h-screen w-screen flex flex-col bg-white">
+      {/* Header */}
       <Header />
-      <StatusBox />
-      <ProfileBox />
-      <FriendsList />
-      <Outlet />
+      {/* Body */}
+      <div className="flex justify-center items-center bg-green-700">
+        {/* left sidebar */}
+        <div className="flex flex-col">
+          <StatusBox />
+          <ProfileBox />
+        </div>
+
+        {/* Outlet (Scrollable Content) */}
+        <div className="overflow-y-auto bg-black">
+          <Outlet />
+        </div>
+
+        {/* Friends List */}
+        <FriendsList />
+      </div>
     </div>
   );
 };

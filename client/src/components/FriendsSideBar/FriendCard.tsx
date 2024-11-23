@@ -40,9 +40,9 @@ export const FriendCard = ({
   };
 
   return (
-    <li className="friend-card">
-      <div className="friendCardHeader">
-        <h5 className="friendName">{friend.display_name}</h5>
+    <li className="items-center p-2">
+      <div className="flex ">
+        <h5 className="bg-slate-500 rounded-md">{friend.display_name}</h5>
         <button onClick={showConfirmDeleteModal}>x</button>
         <Modal show={showModal} onClose={closeConfirmDeleteModal}>
           <Confirm

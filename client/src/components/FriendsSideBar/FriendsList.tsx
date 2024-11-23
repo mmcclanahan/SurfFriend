@@ -16,6 +16,7 @@ export const FriendsList = () => {
   const { userId } = useUser();
   const [friendUsername, setFriendUsername] = useState("");
   const [allFriends, setAllFriends] = useState<Friend[]>([]);
+  const [addingFriend, setAddingFriend] = useState(false);
 
   const fetchFriends = async () => {
     const { data, error } = await getAllFriends(userId);
@@ -37,6 +38,7 @@ export const FriendsList = () => {
       return;
     }
     showNotification("Friend request sent", 1, 2000);
+    setAddingFriend(false);
     fetchFriends();
   };
 
@@ -49,29 +51,38 @@ export const FriendsList = () => {
     fetchFriends();
   };
 
+  const openAddFriendInput = () => {
+    setAddingFriend(!addingFriend);
+  };
+  //for button and friends header try self aligning one to center and other to end and top
   return (
-    <div className="border">
+    <div className="right-0 h-[calc(100vh-4rem)] bg-red-500 p-4 overflow-y-auto">
       <div className="friendSideBar-content">
-        <h3 className="text-lg font-bold rounded bg-black text-white">
-          Friends
-        </h3>
-        <div className="addFriendPart flex items-center gap-1 ">
-          <input
-            className="rounded-md p-1 w-40"
-            name="friendUsername"
-            type="text"
-            placeholder="User Name"
-            onChange={(e) => {
-              setFriendUsername(e.target.value);
-            }}
-          />
-          <button
-            className="bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded"
-            onClick={addFriend}
-          >
-            Add
-          </button>
+        <div className="flex justify-between rounded bg-black text-white">
+          <h3 className="text-lg font-bold rounded bg-black text-white">
+            Friends
+          </h3>
+          <button onClick={openAddFriendInput}>+</button>
         </div>
+        {addingFriend && (
+          <div className="flex items-center gap-1 ">
+            <input
+              className="rounded-md p-1 w-40"
+              name="friendUsername"
+              type="text"
+              placeholder="User Name"
+              onChange={(e) => {
+                setFriendUsername(e.target.value);
+              }}
+            />
+            <button
+              className="bg-myGreen hover:bg-myGreenHover text-myBlack py-2 px-4 rounded"
+              onClick={addFriend}
+            >
+              Add
+            </button>
+          </div>
+        )}
         {allFriends.length === 0 ? (
           <div className="items-center content-center">No Friends</div>
         ) : (
